@@ -8,13 +8,17 @@ package domain
 
 import javax.xml.bind.annotation.{ XmlType, XmlRootElement, XmlAccessorType }
 
-import akka.actor.{ Props, ActorRef, InvalidActorNameException }
+import akka.actor.{ Props, ActorRef, InvalidActorNameException, OneForOneStrategy, SupervisorStrategy }
 import akka.dispatch._
-
 import core.inject.BindingModule
 
 import event._
 import journal.JournalEntry
+
+/**
+ *
+ */
+case class JobClass(jobclass: Class[_ <: JobFSM], name: String, continuous: Boolean)
 
 /**
  *
@@ -40,14 +44,36 @@ class JobMonitorFSM(
 
   extends MonitorFSM[Job] {
 
+  override def preStart = {
+    super.preStart()
+    val continiuousJobs = jobclasses.filter(_._2.continuous)
+    continiuousJobs.foreach {
+      case (jobname, job) ⇒
+        self ! new JobCreate(ContinuousJobDetail(jobname)) {
+          override val id = jobname
+        }
+    }
+  }
+
+  override val supervisorStrategy = OneForOneStrategy() {
+    case _: Throwable ⇒ SupervisorStrategy.Stop
+  }
+
   startWith(Active, Jobs(Vector.empty))
 
   when(Active) {
-    case Event(create @ JobCreate(job, detail), Jobs(jobs)) =>
-      val j = context.actorOf(Props(
-        job.getConstructors()(0).newInstance(create, bindingmodule).asInstanceOf[JobFSM]),
-        name = create.id.toString)
-      stay using Jobs(jobs :+ j)
+    case Event(create @ JobCreate(detail, trigger), Jobs(jobs)) ⇒
+      try {
+        create._counter = jobs.size
+        val job = context.actorOf(Props(
+          jobclasses.get(detail.name).get.jobclass.getConstructors()(0).newInstance(create, bindingmodule).asInstanceOf[JobFSM]),
+          name = create.id)
+        stay using Jobs(jobs :+ job)
+      } catch {
+        case e: Throwable ⇒
+          log.warning("JobMonitor : " + e)
+          stay
+      }
   }
 
   initialize

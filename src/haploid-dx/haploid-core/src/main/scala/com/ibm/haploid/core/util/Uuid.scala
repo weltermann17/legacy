@@ -4,6 +4,8 @@ package core
 
 package util
 
+// import language.implicitConversions
+
 /**
  * A simplifying wrapper around [[java.util.UUID]].
  *

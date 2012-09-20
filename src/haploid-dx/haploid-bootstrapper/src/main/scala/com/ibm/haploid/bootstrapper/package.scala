@@ -5,7 +5,7 @@ import scala.collection.JavaConversions.asScalaBuffer
 /**
  * A bootstrapping framework.
  */
-package object bootstrapper { 
+package object bootstrapper {
 
   import core.config._
 
@@ -25,5 +25,5 @@ package object bootstrapper {
 
   if (restart) require(1000 <= pausebeforerestart, "haploid.bootstrapper.pause-before-restart must be set to at least 1s in order to avoid too many spawned processes in case of an error.")
 
-} 
+}
 

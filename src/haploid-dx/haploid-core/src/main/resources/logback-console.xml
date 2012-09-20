@@ -1,0 +1,11 @@
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${haploid.core.log-pattern}</pattern>
+		</encoder>
+		<filter class="com.ibm.haploid.core.util.logging.LoggerNameFilter" />
+	</appender>
+	<root level="${haploid.core.log-level}:-DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

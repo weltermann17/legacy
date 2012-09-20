@@ -49,7 +49,7 @@ class ByteArrayOutputStream(
    * Returns a ByteArrayInputStream using the same external bytearray. Be careful when mixing reading from this with writing to this instance.
    */
   def getInputStream = new ByteArrayInputStream(array, offset, position - offset)
-  
+
   def toByteArray = array
 
   private[this] var position = offset

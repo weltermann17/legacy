@@ -18,11 +18,13 @@ import binding.xmlAttribute
 @XmlRootElement(name = "task-nodetail")
 case class TaskNoDetail(
 
-  @xmlAttribute(required = true) info: String)
+  @xmlAttribute(required = true) info: String,
+
+  @xmlAttribute(required = true) name: String)
 
   extends TaskDetail {
 
-  private def this() = this(null)
+  private def this() = this(null, null)
 
 }
 

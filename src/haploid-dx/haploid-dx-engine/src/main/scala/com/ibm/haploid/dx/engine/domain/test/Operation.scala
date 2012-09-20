@@ -8,7 +8,7 @@ package domain
 
 package test
 
-import javax.xml.bind.annotation.{XmlRootElement, XmlElement}
+import javax.xml.bind.annotation.{ XmlRootElement, XmlElement }
 
 import operating.OperationDetail
 import binding._

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<unload>
+	<datarow>
+		<mtbident>33771158558</mtbident>
+		<mtbrelease> B </mtbrelease>
+		<mtbdescription>TABELLE ZSB HALTESTANGE                                                 </mtbdescription>
+		<mtbchangenumber>33K43599</mtbchangenumber>
+		<partnerident>WHT.006.572           </partnerident>
+		<partneridentcomp>WHT006572             </partneridentcomp>
+		<partnerrelease/>
+		<drawingdate/>
+		<partnerchangenumber>WHT.006.572           </partnerchangenumber>
+		<dxstatus>03</dxstatus>
+		<ezisstatus>K</ezisstatus>
+		<titleblock>N</titleblock>
+		<standardpart>N</standardpart>
+		<definingident>33771158558         </definingident>
+	</datarow>
+	<datarow>
+		<mtbident>36744068054</mtbident>
+		<mtbrelease>   </mtbrelease>
+		<mtbdescription>TUERSTEUEREINHEIT-EINBAU TUER VORNE                                     </mtbdescription>
+		<mtbchangenumber>36009252</mtbchangenumber>
+		<partnerident>WHT.006.714           </partnerident>
+		<partneridentcomp>WHT006714             </partneridentcomp>
+		<partnerrelease/>
+		<drawingdate/>
+		<partnerchangenumber>WHT.006.714           </partnerchangenumber>
+		<dxstatus>03</dxstatus>
+		<ezisstatus>K</ezisstatus>
+		<titleblock>Y</titleblock>
+		<standardpart>N</standardpart>
+		<definingident>36744068054         </definingident>
+	</datarow>
+	<datarow>
+		<mtbident>06032168208</mtbident>
+		<mtbrelease>   </mtbrelease>
+		<mtbdescription>6KT-SCHRAUBE M6X40-10.9-MAN183-B1                                       </mtbdescription>
+		<mtbchangenumber></mtbchangenumber>
+		<partnerident>07W.019.873.A         </partnerident>
+		<partneridentcomp>07W019873A            </partneridentcomp>
+		<partnerrelease/>
+		<drawingdate/>
+		<partnerchangenumber>07W.019.873.A         </partnerchangenumber>
+		<dxstatus>03</dxstatus>
+		<ezisstatus>K</ezisstatus>
+		<titleblock>Y</titleblock>
+		<standardpart>Y</standardpart>
+		<definingident>06032168208         </definingident>
+	</datarow>
+	<datarow>
+		<mtbident>81418048381</mtbident>
+		<mtbrelease>AX </mtbrelease>
+		<mtbdescription>TABELLE KRAFTSTOFFBEHAELTER-EINBAU                                      </mtbdescription>
+		<mtbchangenumber>81N1122V</mtbchangenumber>
+		<partnerident>WHT.001.001           </partnerident>
+		<partneridentcomp>WHT001001             </partneridentcomp>
+		<partnerrelease/>
+		<drawingdate/>
+		<partnerchangenumber>WHT.001.001           </partnerchangenumber>
+		<dxstatus>03</dxstatus>
+		<ezisstatus>K</ezisstatus>
+		<titleblock>Y</titleblock>
+		<standardpart>N</standardpart>
+		<definingident>81418048381         </definingident>
+	</datarow>
+	<datarow>
+		<mtbident>83711014704</mtbident>
+		<mtbrelease> F </mtbrelease>
+		<mtbdescription>ZSB BODENGERIPPE VORDERTEIL                                             </mtbdescription>
+		<mtbchangenumber>33l20720</mtbchangenumber>
+		<partnerident>WHT.001.002           </partnerident>
+		<partneridentcomp>WHT001002             </partneridentcomp>
+		<partnerrelease/>
+		<drawingdate/>
+		<partnerchangenumber>WHT.001.002           </partnerchangenumber>
+		<dxstatus>03</dxstatus>
+		<ezisstatus>K</ezisstatus>
+		<titleblock>Y</titleblock>
+		<standardpart>N</standardpart>
+		<definingident>83711014704         </definingident>
+	</datarow>
+</unload>

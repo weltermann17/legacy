@@ -7,7 +7,7 @@
 	<groupId>eu.man</groupId>
 	<artifactId>phevos-dx-engine</artifactId>
 
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.7-SNAPSHOT</version>
 
 	<name>phevos-dx-engine</name>
 	<description>phevos-dx-engine provides concrete job scheduling components used for the phevos dx project.</description>
@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>com.ibm.haploid</groupId>
 		<artifactId>haploid-maven3</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 
 	<scm>
@@ -41,17 +41,46 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_2.9.1</artifactId>
+			<artifactId>scalatest_2.9.2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.ibm.haploid</groupId>
 			<artifactId>haploid-dx-engine</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.7-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.man</groupId>
 			<artifactId>phevos-dx-ezis</artifactId>
-			<version>1.0.4-SNAPSHOT</version>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.man</groupId>
+			<artifactId>phevos-dx-kvs</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.man</groupId>
+			<artifactId>phevos-dx-crt</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.man</groupId>
+			<artifactId>phevos-dx-improve</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.man</groupId>
+			<artifactId>phevos-dx-gep</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.man</groupId>
+			<artifactId>phevos-dx-util</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

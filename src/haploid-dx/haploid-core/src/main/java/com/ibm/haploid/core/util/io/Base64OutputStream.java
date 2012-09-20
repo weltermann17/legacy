@@ -39,7 +39,8 @@ import java.io.OutputStream;
  * 
  * @author John Mani
  * @author Bill Shannon
- * @author Guido Schmidt, IBM - renamed to Base64OutputStream, removed "synchronized" aspect
+ * @author Guido Schmidt, IBM - renamed to Base64OutputStream, removed
+ *         "synchronized" aspect
  */
 
 public final class Base64OutputStream extends FilterOutputStream {

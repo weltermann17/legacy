@@ -5,12 +5,11 @@ package dx
 package engine
 
 import java.io.File
-
 import akka.actor._
-
 import core.concurrent.{ actorsystem ⇒ system }
 import core.file.temporaryDirectory
 import core.util.time.now
+import java.nio.file.Paths
 
 /**
  *
@@ -33,6 +32,8 @@ package object journal {
   val archivedirectory = getDirectory("haploid.dx.engine.journal.archive-directory")
 
   val xmlbackupdirectory = new File(getDirectory("haploid.dx.engine.journal.xml-backup-directory"), now.toString)
+  
+  val xmlbackupbasedirectory = Paths.get(getDirectory("haploid.dx.engine.journal.xml-backup-directory").toString)
 
   val replicatedirectory = getDirectory("haploid.dx.engine.journal.replicate-directory")
 
@@ -55,5 +56,5 @@ package object journal {
     case f ⇒ new File(f)
   }
 
-} 
+}
 

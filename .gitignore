@@ -7,4 +7,10 @@
 *.classpath
 *.DS_Store
 *.cache
+*.CATDrawing
+*.CATPart
+*.CATProduct
+*.CATSettings
+*.exe
+*.dll
 

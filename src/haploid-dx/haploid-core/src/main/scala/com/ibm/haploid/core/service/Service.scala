@@ -11,7 +11,7 @@ trait Service[I, O] {
 
   def doService(input: I): Result[O]
 
-  def apply(input: I): Result[O] = try { doService(input) } catch { case e => Failure(e) }
+  def apply(input: I): Result[O] = try { doService(input) } catch { case e: Throwable ⇒ Failure(e) }
 
 }
 

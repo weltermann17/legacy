@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<packaging>jar</packaging>
+
+	<groupId>eu.man</groupId>
+	<artifactId>phevos-dx-kvs</artifactId>
+
+	<version>1.0.7-SNAPSHOT</version>
+
+	<name>phevos-dx-kvs</name>
+	<description>KVS connection methods</description>
+
+	<parent>
+		<groupId>com.ibm.haploid</groupId>
+		<artifactId>haploid-maven3</artifactId>
+		<version>1.0.7-SNAPSHOT</version>
+	</parent>
+
+	<scm>
+		<developerConnection>scm:git:ssh://git@mndemucpenon.mn-man.biz/${project.name}.git</developerConnection>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.ibm.haploid</groupId>
+			<artifactId>haploid-dx-kvs</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.man</groupId>
+			<artifactId>phevos-dx-util</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.haploid</groupId>
+			<artifactId>haploid-experimental-spray-can</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-compiler</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-actor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.ssl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.jackson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.jetty</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.crypto</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+

@@ -1,0 +1,165 @@
+' -----------------------------------------------------------------------------
+' Script Copyright MAN Truck & Bus AG, 2012
+' -----------------------------------------------------------------------------
+' Description:
+'           Script to simplify CATParts
+'
+' Prerequisite:
+'
+'
+' -----------------------------------------------------------------------------
+
+Dim filename                        As String
+Dim newname                         As String
+Dim workingdir                      As String
+
+Dim g_fileSystem As Object          'CATIA.FileSystem
+Dim g_systemService As Object       'CATIA.SystemService
+Dim g_systemConfig As Object        'CATIA.SystemConfiguration
+
+Dim dummyOutputString 				As String
+
+Language="VBSCRIPT"
+
+Sub CATMain()
+    ' ---------------------------------------------------------------------------
+    ' Environmental variables
+    ' ---------------------------------------------------------------------------
+    
+    Set g_fileSystem = CATIA.FileSystem
+    Set g_systemService = CATIA.SystemService
+    Set g_systemConfig = CATIA.SystemConfiguration
+    
+    filename = g_systemService.Environ("PHEVOS_DX_SRC_FILE")
+    newname = g_systemService.Environ("PHEVOS_DX_NEW_PART_NAME")
+    workingdir = g_systemService.Environ("PHEVOS_DX_SRC_FOLDER")
+    
+    ' ---------------------------------------------------------------------------
+    ' Load part into CATIA
+    ' ---------------------------------------------------------------------------
+    Dim oProductDocument As Document
+    Dim oProduct As Part
+    Dim oProd2Part As DECPartToPart
+    Dim oAllCATPart As Object
+    Dim DMUDocument As Object
+    Dim sError As String
+        
+    CATIA.RefreshDisplay = False
+    CATIA.DisplayFileAlerts = False
+    
+	g_systemService.Print("Trying to open " & filename)
+
+    Set oProductDocument = CATIA.Documents.Open(filename)
+    
+    'version: CATPart as root
+    Set oProduct = oProductDocument.Part
+    Set oProd2Part = oProduct.GetItem("DECPartToPart")
+    oProd2Part.SetOption ("KeepProductProperties") ' function only works by CATParts
+    oProd2Part.SetOption ("KeepSubColors")
+    oProd2Part.Run
+    sError = oProd2Part.GetError
+    Set oAllCATPart = oProd2Part.GetResult
+    
+    Set DMUDocument = CATIA.ActiveDocument
+    
+    oProductDocument.Close
+    
+    ' -------------------------------------------------------------------------
+    ' Rename part number
+    ' -------------------------------------------------------------------------
+    
+    Dim ProductDoc1_As_Document 
+	Set ProductDoc1 = Catia.ActiveDocument 
+	ProductDoc1.Product.PartNumber = UCase(newname)
+
+	Dim Selection1_As_Selection 
+	Set Selection1 = ProductDoc1.Selection 
+	
+	Selection1.Search "CatPrtSearch.AxisSystem,All" 'hide axissystem
+	Set visPropertySet1 = Selection1.visProperties 
+	VisPropertySet1.SetShow 1 
+	Selection1.Clear 
+    
+    ' -------------------------------------------------------------------------
+    ' Prefix all user defined properties with "MTB_"
+    ' -------------------------------------------------------------------------
+    Dim propertycount As Integer
+    propertycount = CATIA.ActiveDocument.Product.UserRefProperties.Count
+    
+    Dim i As Integer
+    For i = 1 To propertycount
+        Dim property As Parameter
+        Set property = CATIA.ActiveDocument.Product.UserRefProperties.Item(i)
+        
+        Call property.Rename("MTB_" & getRightSubStrRev(property.Name, "\"))
+        Set property = Nothing
+    Next
+    
+    If g_fileSystem.FileExists(filename) Then
+        g_fileSystem.DeleteFile (filename)
+    End If
+    
+	g_systemService.Print("Trying to save " & workingdir & newname  & ".CATPart")
+
+    DMUDocument.SaveAs(workingdir & newname  & ".CATPart")
+    DMUDocument.Close
+    
+	g_systemService.Print("Finished successfully.")
+
+    ' -------------------------------------------------------------------------
+    'Cleanup
+    ' -------------------------------------------------------------------------
+    Set g_fileSystem = Nothing
+    Set g_systemService = Nothing
+    Set g_systemConfig = Nothing
+    
+    CATIA.Quit
+End Sub
+
+' --------------------------------------------------------------------------
+' string functions
+' --------------------------------------------------------------------------
+Function getRightSubStrRev(check As String, match As String) As String
+    Dim pos As Integer
+    
+    pos = InStrRev(check, match)
+    If (pos > 0) Then
+        getRightSubStrRev = Mid(check, pos + 1)
+    Else
+        getRightSubStrRev = check
+    End If
+    
+End Function
+    
+Function getLeftSubStrRev(check As String, match As String) As String
+    Dim pos As Integer
+    
+    pos = InStrRev(check, match)
+    If (pos > 0) Then
+    getLeftSubStrRev = Left(check, pos - 1)
+    Else
+        getLeftSubStrRev = check
+    End If
+    
+End Function
+    
+Function getRightSubStr(check As String, match As String) As String
+    Dim pos As Integer
+    pos = InStr(1, check, match)
+    If (pos > 0) Then
+        getRightSubStr = Mid(check, pos + 1)
+    Else
+        getRightSubStr = check
+    End If
+End Function
+
+Function getLeftSubStr(check As String, match As String) As String
+   Dim pos As Integer
+   pos = InStr(1, check, match)
+   If (pos > 0) Then
+      getLeftSubStr = Left(check, pos - 1)
+   Else
+      getLeftSubStr = check
+   End If
+End Function
+

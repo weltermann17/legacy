@@ -12,6 +12,8 @@ import scala.annotation.target.field
 
 package object binding {
 
+  import core.config._
+  
   type xmlAnyElement = XmlAnyElement @field
   type xmlAttribute = XmlAttribute @field
   type xmlElement = XmlElement @field
@@ -22,5 +24,8 @@ package object binding {
   type xmlTransient = XmlTransient @field
 
   type JVector[A <: DomainObject] = java.util.Vector[A]
+  
+  val allowSerializedXML = getBoolean("haploid.dx.engine.domain.binding.allow-serialized-xml")
+  val warnOnSerializedXML = getBoolean("haploid.dx.engine.domain.binding.warn-on-serialized-xml")
 
 }

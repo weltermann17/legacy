@@ -4,14 +4,14 @@ package dx
 
 package engine
 
-package domain 
+package domain
 
 package operating
 
 /**
  *
  */
-sealed trait Locality  
+sealed trait Locality
 
 trait Local extends Locality
 

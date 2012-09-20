@@ -12,19 +12,14 @@ package util
 
 import java.nio.file.Path
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
-import javax.xml.bind.annotation.{ XmlRootElement, XmlElement, XmlAttribute, XmlType }
+import javax.xml.bind.annotation.{ XmlType, XmlRootElement, XmlAccessorType }
 
-import akka.actor.Props
-import akka.dispatch.{ Await, Future }
-import akka.pattern.ask
-import akka.event._
+import akka.event.LoggingAdapter
 
 import core.service._
-import core.inject.BindingModule
-import journal.JournalEntry
-import domain.binding._
-import event._
+
+import domain.operating.{ ExternalOperator, ExternalOperationDetail }
+import event.OperationCreate
 
 /**
  *
@@ -32,13 +27,21 @@ import event._
 @XmlType(name = "script-operation-detail")
 case class ScriptOperationDetail(
 
-  @xmlAttribute(required = true) script: String,
+  private val scr: String,
 
-  @xmlAttribute(required = true) timeoutinmilliseconds: Long)
+  private val modname: String,
 
-  extends ExternalOperationDetail(script, timeoutinmilliseconds) {
+  private val rsc: Seq[String],
 
-  private def this() = this(null, -1L)
+  private val env: Map[String, String],
+
+  private val lfile: String,
+
+  private val tmout: Long)
+
+  extends ExternalOperationDetail("script", scr, modname, rsc, env, lfile, tmout) {
+
+  private def this() = this(null, null, null, null, null, -1L)
 
 }
 
@@ -56,6 +59,20 @@ class ScriptOperator(
   val timeout: Long)
 
   extends ExternalOperator {
+
+  type PreProcessingInput = Unit
+
+  type ProcessingInput = Unit
+
+  type PostProcessingInput = Unit
+
+  type PostProcessingOutput = Unit
+
+  protected[this] def doPreProcessing(input: Unit) = Success(input)
+
+  protected[this] def doProcessing(input: Unit) = Success(input)
+
+  protected[this] def doPostProcessing(input: Unit) = Success(input)
 
 }
 

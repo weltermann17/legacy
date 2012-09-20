@@ -10,15 +10,17 @@ import scala.collection.JavaConversions.seqAsJavaList
 
 import core.concurrent._
 import core.logger
+import core.util.process.killProcessWithChildren
 
 import HasTerminationHook._
 
 object BootStrapper extends App with HasTerminationHook {
 
-  private[this] var process = new AtomicReference[Process]
+  private[this] val process = new AtomicReference[Process]
   private[this] var startcount = 0
+  private[this] var childexitcode = 0
 
-  addShutdownHook(() => killChild)
+  addShutdownHook(() ⇒ killChild)
 
   def onTermination = {
     killChild
@@ -30,6 +32,8 @@ object BootStrapper extends App with HasTerminationHook {
       val processwriter = new PrintWriter(new OutputStreamWriter(process.get.getOutputStream))
       processwriter.println(terminationtoken)
       processwriter.close
+      Thread.sleep(3000)
+      killProcessWithChildren(process.get)
       process.set(null)
       System.out.println("Killed child process (" + mainclass + ").")
       System.out.flush
@@ -37,22 +41,32 @@ object BootStrapper extends App with HasTerminationHook {
   }
 
   private def continue(code: Int) = {
+    childexitcode = code
     startcount += 1
     exitcodetostoprestarting != code && (-1 < maximumrestarts && startcount < maximumrestarts)
   }
 
   private def pause = Thread.sleep(pausebeforerestart)
 
-  private def unwanted: ((String, String)) => Boolean = {
-    case (k, v) =>
-      !k.startsWith("java") && !k.startsWith("sun") && !k.startsWith("os") && !k.startsWith("user") && !k.startsWith("file") && !k.startsWith("path") && !k.startsWith("line") && !k.startsWith("awt")
+  private def wanted: ((String, String)) ⇒ Boolean = {
+    case (k, v) ⇒
+      k == "java.io.tmpdir" ||
+        (!k.startsWith("java")
+          && !k.startsWith("sun")
+          && !k.startsWith("os")
+          && !k.startsWith("user")
+          && !k.startsWith("file")
+          && !k.startsWith("path")
+          && !k.startsWith("line")
+          && !k.startsWith("awt")
+          && !k.startsWith("haploid.bootstrapping"))
   }
 
   private def startProcess = {
     val classpath = management.ManagementFactory.getRuntimeMXBean.getClassPath
     val properties = System.getProperties.toList
-      .filter(unwanted)
-      .map { case (k, v) => ("-D" + k + "=" + v) }
+      .filter(wanted)
+      .map { case (k, v) ⇒ ("-D" + k + "=" + v) }
     val commands = List(
       List("java"),
       properties,
@@ -77,10 +91,10 @@ object BootStrapper extends App with HasTerminationHook {
     }
     process.set(null)
   } catch {
-    case e: InterruptedException => killChild
-    case e => e.printStackTrace
+    case e: InterruptedException ⇒ killChild
+    case e: Throwable ⇒ e.printStackTrace
   } finally {
-    System.exit(0)
+    System.exit(childexitcode)
   }
 
 }

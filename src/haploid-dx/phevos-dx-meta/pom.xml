@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<packaging>pom</packaging>
+
+	<groupId>eu.man</groupId>
+	<artifactId>phevos-dx-meta</artifactId>
+
+	<version>1.0.7-SNAPSHOT</version>
+
+	<name>phevos-dx-meta</name>
+	<description>Meta module to build all modules including the executable.</description>
+
+	<parent>
+		<groupId>com.ibm.haploid</groupId>
+		<artifactId>haploid-maven3</artifactId>
+		<version>1.0.7-SNAPSHOT</version>
+	</parent>
+	
+	<modules>
+		<module>../haploid-maven3</module>
+		<module>../haploid-core</module>
+		<module>../haploid-selfextractor</module>
+		<module>../haploid-bootstrapper</module>
+		<module>../haploid-experimental-spray-can</module>
+		<module>../haploid-dx-engine</module>
+		<module>../haploid-dx-kvs</module>
+		<module>../haploid-dx-mq</module>
+		<module>../phevos-dx-util</module>
+		<module>../phevos-dx-crt</module>
+		<module>../phevos-dx-ezis</module>
+		<module>../phevos-dx-gep</module>
+		<module>../phevos-dx-kvs</module>
+		<module>../phevos-dx-improve</module>
+		<module>../phevos-mock-crt-exe</module>
+		<module>../phevos-mock-ezis-exe</module>
+		<module>../phevos-mock-gep-exe</module>
+		<module>../phevos-mock-kvs-exe</module>
+		<module>../phevos-mock-improve-exe</module>
+		<module>../phevos-dx-engine</module>
+		<module>../phevos-dx-engine-exe</module>
+	</modules>
+
+</project>
+

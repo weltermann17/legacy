@@ -9,6 +9,9 @@ package core
  */
 package object dispose {
 
+  // import language.implicitConversions
+  // import language.reflectiveCalls
+
   import scala.util.continuations.{ ControlContext, cps, shift, reset }
 
   /**
@@ -22,12 +25,12 @@ package object dispose {
 
   def forceContextType[T]: ContextType[T] = null
 
-  private def use[S <% Disposable[S], T: ContextType](what: S)(block: S => T): T = {
+  private def use[S <% Disposable[S], T: ContextType](what: S)(block: S ⇒ T): T = {
     try {
       block(what)
     } catch {
-      case e: OutOfMemoryError => core.terminateJvm(e, -1)
-      case e => throw e
+      case e: OutOfMemoryError ⇒ core.terminateJvm(e, -1)
+      case e: Throwable ⇒ throw e
     } finally {
       what.dispose
     }
@@ -56,7 +59,7 @@ package object dispose {
    * }}}
    * @return T of forceContextType[T]
    */
-  def using[T](block: => T @cps[T]): T = reset { block }
+  def using[T](block: ⇒ T @cps[T]): T = reset { block }
 
   // implicit conversions
 
@@ -72,7 +75,7 @@ package object dispose {
         try {
           what.close
         } catch {
-          case e =>
+          case e: Throwable ⇒
         }
       }
     }
@@ -84,7 +87,7 @@ package object dispose {
         try {
           what.finish
         } catch {
-          case e =>
+          case e: Throwable ⇒
         }
       }
     }
@@ -105,7 +108,7 @@ package object dispose {
         try {
           what.close
         } catch {
-          case e =>
+          case e: Throwable ⇒
         }
       }
     }
@@ -127,10 +130,10 @@ package object dispose {
           what.finish
           what.close
         } catch {
-          case e =>
+          case e: Throwable ⇒
         }
       }
     }
   }
 
-} 
+}

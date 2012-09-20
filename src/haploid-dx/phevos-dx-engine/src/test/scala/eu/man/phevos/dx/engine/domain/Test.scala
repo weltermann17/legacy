@@ -8,67 +8,107 @@ package engine
 
 package domain
 
-import akka.actor._
-import akka.dispatch._
-import akka.pattern.ask
-import akka.util.Timeout
-import akka.util.duration._
 import org.junit.Test
+import com.ibm.haploid.core.concurrent.{ actorsystem ⇒ system }
 import com.ibm.haploid.core.inject.BaseBindingModule
-import com.ibm.haploid.core.concurrent.{ actorsystem ⇒ system } 
-import com.ibm.haploid.dx.engine._
-import com.ibm.haploid.dx.engine.domain._
-import com.ibm.haploid.dx.engine.event._
+import dx.engine.domain.jobs.JobFSM
+import com.ibm.haploid.dx.engine.domain.{ EngineFSM, Engine, Collector }
+import com.ibm.haploid.dx.engine.event.{ Redo, ReceiverEvent, JobCreate, Collect }
 import com.ibm.haploid.dx.engine.journal.journal
-import akka.dispatch.OnFailure
+import com.ibm.haploid.dx.engine.defaulttimeout
+import akka.actor.actorRef2Scala
+import akka.actor.{ Props, ActorRef }
+import akka.dispatch.Await
+import akka.pattern.ask
+import akka.util.duration.intToDurationInt
+import akka.util.Timeout
+import eu.man.phevos.dx.engine.domain.jobs.CollectJobFSM
+import eu.man.phevos.dx.engine.domain.jobs.JobDetail
 
 @Test private class DomainTest {
 
-  @Test def testAll = {
-    for (i ← 1 to 1) {
+  import com.ibm.haploid.core.config._
 
-      object binding extends BaseBindingModule({ module ⇒
-        import module._
-        bind[ActorRef] identifiedBy 'journal toSingle journal
-      })
-
-      val engine = EngineFSM(binding)
-
-      (journal ? Redo)(Timeout(15 minutes)) onSuccess {
-
-        case e ⇒
-
-          Thread.sleep(1000); println("Online")
-
-          for (i ← 1 to 100) {
-            Await.result(journal ? ReceiverEvent(
-              "/engine/jobs",
-              JobCreate(classOf[JobFSM], JobDetail("65.4711-" + i, "___", "WHT." + i, ""))), defaulttimeout.duration)
-          }
-
-          Thread.sleep(20000); println("Created")
-
-          val collector = system.actorOf(Props[Collector])
-
-          engine ! Collect(collector)
-
-          Thread.sleep(2000); println("Info")
-
-          (collector ? Collect(null)).onSuccess { case e: Engine ⇒ e.toXml(System.out) }
-
-          Thread.sleep(1000); println("Offline")
-
-          system.shutdown
-
-      } onFailure {
-        case e ⇒
-          println(e)
-          system.shutdown
-      }
-
-      system.awaitTermination; println("End")
-
-    }
+  @Test def appDir = {
+    println(getString("haploid.core.application-directory"))
   }
+
+  //  @Test def testFlow = {
+  //    object binding extends BaseBindingModule({ module ⇒
+  //      import module._
+  //      bind[ActorRef] identifiedBy 'journal toSingle journal
+  //    })
+  //
+  //    val engine = EngineFSM(binding)
+  //
+  //    (journal ? Redo)(Timeout(15 minutes)) onSuccess {
+  //
+  //      case e: Throwable ⇒
+  //
+  //        Thread.sleep(50000); println("Created. Sleep 30 seconds.")
+  //
+  //        val collector = system.actorOf(Props[Collector])
+  //
+  //
+  //        (collector ? Collect(engine)).onSuccess { case e: Engine ⇒ e.toXml(System.out) }
+  //
+  //        Thread.sleep(3000); println("Offline. Sleep 1 second.")
+  //
+  //        system.shutdown
+  //    } onFailure {
+  //      case e: Throwable ⇒
+  //        println(e)
+  //        system.shutdown
+  //    } 
+  //
+  //    system.awaitTermination; println("End")
+  //  }
+
+  //  @Test def testAll = {
+  //    for (i ← 1 to 1) {
+  //
+  //      object binding extends BaseBindingModule({ module ⇒
+  //        import module._
+  //        bind[ActorRef] identifiedBy 'journal toSingle journal
+  //      })
+  //
+  //      val engine = EngineFSM(binding)
+  //
+  //      (journal ? Redo)(Timeout(15 minutes)) onSuccess {
+  //
+  //        case e: Throwable ⇒
+  //
+  //          Thread.sleep(1000); println("Online. Sleep 1 second.")
+  //
+  //          for (i ← 1 to 1) {
+  //            Await.result(journal ? ReceiverEvent(
+  //              "/engine/jobs",
+  //              JobCreate(classOf[JobFSM], JobDetail("65.4711-" + i, "___", "WHT." + i, "", "03", "...", -1L, true, false))), defaulttimeout.duration)
+  //          }
+  //
+  //          Thread.sleep(5000); println("Created. Sleep 5 secons.")
+  //
+  //          val collector = system.actorOf(Props[Collector])
+  //
+  //          engine ! Collect(collector)
+  //
+  //          Thread.sleep(1000); println("Info. Sleep 1 second.")
+  //
+  //          (collector ? Collect(null)).onSuccess { case e: Engine ⇒ e.toXml(System.out) }
+  //
+  //          Thread.sleep(1000); println("Offline. Sleep 1 second.")
+  //
+  //          system.shutdown
+  //
+  //      } onFailure {
+  //        case e: Throwable ⇒
+  //          println(e)
+  //          system.shutdown
+  //      }
+  //
+  //      system.awaitTermination; println("End")
+  //
+  //    }
+  //  }
 
 }

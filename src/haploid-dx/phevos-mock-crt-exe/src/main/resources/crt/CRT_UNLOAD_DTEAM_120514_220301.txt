@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8" ?><unload>
+<datarow><mtbident>81930302081</mtbident><mtbrelease>   </mtbrelease><mtbdescription>RING                                                                    </mtbdescription><mtbchangenumber>81730321</mtbchangenumber>                                      <partnerident>WHT.006.572           </partnerident><partneridentcomp>WHT006572             </partneridentcomp><partnerrelease>      </partnerrelease><drawingdate></drawingdate><partnerchangenumber>WHT.006.572           </partnerchangenumber>              <dxstatus>03</dxstatus><ezisstatus>K</ezisstatus><titleblock>N</titleblock><definingident>81930302081         </definingident></datarow>
+</unload>

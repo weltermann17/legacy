@@ -22,8 +22,8 @@ import channel._
 class Job extends Actor {
 
   def receive = {
-    case entry: JournalEntry => counter += 1
-    case "count" => println("jobs " + counter)
+    case entry: JournalEntry ⇒ counter += 1
+    case "count" ⇒ println("jobs " + counter)
   }
 
   private[this] var counter = 0L
@@ -33,8 +33,8 @@ class Job extends Actor {
 class Task extends Actor {
 
   def receive = {
-    case entry: JournalEntry => counter += 1
-    case "count" => println("tasks " + counter)
+    case entry: JournalEntry ⇒ counter += 1
+    case "count" ⇒ println("tasks " + counter)
   }
 
   private[this] var counter = 0L
@@ -44,17 +44,17 @@ class Task extends Actor {
 @Test private class ChannelTest {
 
   @Test def test1 = {
-//    val N = 1000
-//    val job = actorsystem.actorOf(Props[Job]) 
-//    val task = actorsystem.actorOf(Props[Task]) 
-//    journal.channel.subscribe(job, JobEvent)
-//    journal.channel.subscribe(task, TaskEvent)
-//    def entry(i: Int) = i % 3 match { case 0 => JobCreate(newUuid) case 1 => TaskCreate(i) case 2 => JobCreate(i) }
-//    for (i <- 0 until N) journal.append(entry(i)); journal.flush
-//    println("written " + N)
-//    journal.redo
-//    job ! "count"
-//    task ! "count"
+    //    val N = 1000
+    //    val job = actorsystem.actorOf(Props[Job]) 
+    //    val task = actorsystem.actorOf(Props[Task]) 
+    //    journal.channel.subscribe(job, JobEvent)
+    //    journal.channel.subscribe(task, TaskEvent)
+    //    def entry(i: Int) = i % 3 match { case 0 => JobCreate(newUuid) case 1 => TaskCreate(i) case 2 => JobCreate(i) }
+    //    for (i <- 0 until N) journal.append(entry(i)); journal.flush
+    //    println("written " + N)
+    //    journal.redo
+    //    job ! "count"
+    //    task ! "count"
   }
 
 }

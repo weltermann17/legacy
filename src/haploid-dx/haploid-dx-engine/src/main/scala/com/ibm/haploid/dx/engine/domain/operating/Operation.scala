@@ -8,88 +8,66 @@ package domain
 
 package operating
 
+import java.nio.file.Paths
+
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 import javax.xml.bind.annotation.{ XmlType, XmlRootElement, XmlElement, XmlAttribute }
 
+import akka.actor.actorRef2Scala
 import akka.actor.ActorPath
 
-import com.ibm.haploid.dx.engine.domain.DomainObjectFSM
-import com.ibm.haploid.dx.engine.event.OperationCreate
+import com.ibm.haploid.core.service.Result
+import com.ibm.haploid.dx.engine.domain.binding._
+import com.ibm.haploid.dx.engine.domain.flow.{ Succeeded, IncompleteData, Failed, ExecutionResultDetail, ExecutionDetail, Executable, CompletedData }
+import com.ibm.haploid.dx.engine.domain.Active
+import com.ibm.haploid.dx.engine.event.{ OperationExecute, OperationCreate, Collect }
 
 import core.inject.BindingModule
-import core.service._
-import core.util.text.stackTraceToBase64
+import core.service.{ Success, Failure }
 
-import domain.{ Idle, DomainObjectState, DomainObjectFSM, DomainObject }
-import event.{ OperationResult, OperationExecute, OperationCreate, Execute, Collect }
-import binding._
-
-/**
- * States of a Operation.
- */
-sealed trait OperationState extends DomainObjectState
-
-case object OperationSucceeded extends OperationState
-case object OperationFailed extends OperationState
-case object OperationNotApplicable extends OperationState
-case object OperationArchived extends OperationState
+import domain.DomainObject
+import event.{ TaskOperationResult, OperationResult }
 
 /**
  * Details of an Operation (the input).
  */
-abstract class OperationDetail(
+abstract class OperationDetail(val operator: String) extends ExecutionDetail {
 
-  val operator: String)
-
-  extends DomainObject {
-
-  def this() = this(null)
+  private def this() = this(null)
 
 }
 
 /**
  * Details of an Operation result (the output).
  */
-abstract class OperationResultDetail(success: Boolean)
+@XmlRootElement(name = "operation-result-detail")
+@XmlType(propOrder = Array("success", "durationinmilliseconds", "result", "reason", "console", "logfile", "internallogging", "stacktrace"))
+case class OperationResultDetail(
 
-  extends DomainObject {
+  @xmlJavaTypeAdapter(classOf[ResultAdapter]) result: Result[Any],
 
-  def this() = this(false)
+  @xmlJavaTypeAdapter(classOf[CDataAdapter]) reason: String,
 
-  @XmlAttribute(required = true) def getSuccess = success
+  @xmlJavaTypeAdapter(classOf[CDataAdapter]) console: String,
 
+  @xmlJavaTypeAdapter(classOf[CDataAdapter]) logfile: String,
+
+  @xmlJavaTypeAdapter(classOf[CDataAdapter]) internallogging: String,
+
+  @xmlJavaTypeAdapter(classOf[CDataAdapter]) stacktrace: String,
+
+  @xmlAttribute(required = true) durationinmilliseconds: Long)
+
+  extends ExecutionResultDetail {
+
+  def this() = this(null, null, null, null, null, null, -1L)
+
+  @XmlAttribute(required = true) def getSuccess = result match {
+    case Success(_) ⇒ true
+    case Failure(_) ⇒ false
+  }
+  
 }
-
-/**
- * Simple output wrapper
- */
-@XmlType(name = "simple-operation-result-detail")
-case class SimpleOperationResultDetail(
-
-  private val success: Boolean,
-
-  @xmlJavaTypeAdapter(classOf[CDataAdapter]) result: String)
-
-  extends OperationResultDetail(success) {
-
-  def this() = this(false, null)
-
-}
-
-/**
- * In case an operation failed.
- */
-case class OperationFailed(details: OperationResultDetail)
-
-  extends Exception
-
-/**
- * Data of a Operation.
- */
-sealed trait OperationData
-
-case class OperationIncomplete(create: OperationCreate) extends OperationData
-
-case class OperationCompleted(create: OperationCreate, completed: Long, details: OperationResultDetail) extends OperationData
 
 /**
  *
@@ -131,54 +109,62 @@ case class Operation(
  */
 class OperationFSM(
 
-  val operation: OperationCreate)(
+  val operation: OperationCreate)(implicit bindingmodule: BindingModule)
 
-    implicit bindingmodule: BindingModule)
+  extends Executable {
 
-  extends DomainObjectFSM[OperationData] {
+  protected[this] lazy val execution = operation
+
+  protected[this] lazy val parent = Some(context.system.actorFor(self.path.parent.parent))
 
   private[this] lazy val operator = ActorPath.fromString("akka://default/user/engine/operators/" + operation.detail.operator)
 
-  private[this] lazy val basedirectory = rootdirectory.resolve(self.path.toString.replace("akka://default/user/", ""))
+  private[this] lazy val basedirectory = {
+    Paths.get(rootdirectory.resolve(self.path.toString.replace("akka://default/user/", "")).toAbsolutePath.toString
+      .replace(operation.task.job.id, operation.task.job._counter.toString)
+      .replace("operations", "o")
+      .replace("subtasks", "s")
+      .replace("tasks", "t"))
+  }
 
-  startWith(Idle, OperationIncomplete(operation))
+  override val log = core.newLogger(operation.toString)
 
-  when(Idle) {
-    case Event(Execute, _) ⇒
-      context.system.actorFor(operator) ! OperationExecute(operation, basedirectory)
+  execute {
+    case input: Any ⇒
+      if (isOnline) {
+        log.debug("Online 'OperationExecute' to operator " + operator)
+        context.system.actorFor(operator) ! OperationExecute(operation, basedirectory, input)
+      }
       goto(Active)
   }
 
-  when(OperationSucceeded) {
-    case Event((), _) ⇒ stay
+  relaunchWithInput {
+    case (_, input) ⇒
+      log.debug("Relaunch 'OperationExecute' to operator " + operator)
+      context.system.actorFor(operator) ! OperationExecute(operation, basedirectory, input)
+      goto(Active) using initialData
   }
 
-  when(OperationFailed) {
-    case Event((), _) ⇒ stay
+  complete {
+    case OperationResultDetail(result, _, _, _, _, _, _) ⇒
+      TaskOperationResult(result)
   }
 
   whenUnhandled {
+    case Event(event @ OperationResult(result), IncompleteData(operation, _)) ⇒ result match {
 
-    case Event(event @ OperationResult(result), OperationIncomplete(operation)) ⇒ result match {
+      case details @ OperationResultDetail(succ @ Success(_), _, _, _, _, _, _) ⇒
+        goto(Succeeded) using CompletedData(operation, event.created, details)
 
-      case Success(details) if details.isInstanceOf[OperationResultDetail] =>
-        goto(OperationSucceeded) using OperationCompleted(operation, event.created, details.asInstanceOf[OperationResultDetail])
+      case details @ OperationResultDetail(fail @ Failure(_), _, _, _, _, _, _) ⇒
+        goto(Failed) using CompletedData(operation, event.created, details)
 
-      case Success(details) =>
-        goto(OperationSucceeded) using OperationCompleted(operation, event.created, SimpleOperationResultDetail(true, details.toString))
-
-      case Failure(OperationFailed(details)) =>
-        goto(OperationFailed) using OperationCompleted(operation, event.created, details)
-
-      case Failure(throwable) =>
-        goto(OperationFailed) using OperationCompleted(operation, event.created, SimpleOperationResultDetail(false, stackTraceToBase64(throwable)))
     }
 
-    case Event(Collect(collector), OperationIncomplete(operation)) ⇒
+    case Event(Collect(collector, _), IncompleteData(operation @ OperationCreate(_, _, _), _)) ⇒
       collector ! Operation(operation, self.path.name, stateName.toString.toLowerCase, basedirectory.toString, -1L, null)
       stay
-
-    case Event(Collect(collector), OperationCompleted(operation, completed, details)) ⇒
+    case Event(Collect(collector, _), CompletedData(operation @ OperationCreate(_, _, _), completed, details @ OperationResultDetail(_, _, _, _, _, _, _))) ⇒
       collector ! Operation(operation, self.path.name, stateName.toString.toLowerCase, basedirectory.toString, completed, details)
       stay
 
@@ -187,5 +173,4 @@ class OperationFSM(
   initialize
 
 }
-
 

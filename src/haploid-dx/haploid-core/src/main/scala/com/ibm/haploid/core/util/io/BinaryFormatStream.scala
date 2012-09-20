@@ -18,7 +18,7 @@ trait BinaryFormatter[T] {
   def serialize(elem: T, bytebuffer: BinaryFormatByteBuffer)
 
   def deserialize(bytebuffer: BinaryFormatByteBuffer): T
-  
+
 }
 
 /**
@@ -97,9 +97,9 @@ final class BinaryFormatByteBuffer(
   extends BinaryOutput with BinaryInput {
 
   def this(buf: ByteBuffer) = this(buf, 0, buf.capacity)
-  
+
   def clear = { buffer.clear; position = initialposition }
-  
+
   def getBuffer = buffer
 
   def writeBoolean(v: Boolean) = {
@@ -156,7 +156,7 @@ final class BinaryFormatByteBuffer(
   def writeMap(v: Map[String, Any]) = {
     writeByte(v.size.toByte)
     v.toList.foreach {
-      case (k, v) =>
+      case (k, v) ⇒
         writeString(k)
         writeAny(v)
     }
@@ -170,8 +170,8 @@ final class BinaryFormatByteBuffer(
   def writeOption(v: Option[Any]) = {
     writeBoolean(v.isDefined)
     v match {
-      case None =>
-      case Some(v) => writeAny(v)
+      case None ⇒
+      case Some(v) ⇒ writeAny(v)
     }
   }
 
@@ -221,12 +221,12 @@ final class BinaryFormatByteBuffer(
 
   def readMap: Map[String, Any] = {
     val len = readByte
-    (0 until len).foldLeft(Map[String, Any]()) { case (m, _) => m ++ Map(readString -> readAny) }
+    (0 until len).foldLeft(Map[String, Any]()) { case (m, _) ⇒ m ++ Map(readString -> readAny) }
   }
 
   def readList: List[Any] = {
     val len = readByte
-    (0 until len).foldLeft(List[Any]()) { case (l, _) => l ++ List(readAny) }
+    (0 until len).foldLeft(List[Any]()) { case (l, _) ⇒ l ++ List(readAny) }
   }
 
   def readOption: Option[Any] = {
@@ -235,56 +235,56 @@ final class BinaryFormatByteBuffer(
 
   private[this] def writeType(v: Any): Unit = {
     writeByte((v: @unchecked) match {
-      case _: Boolean => 1
-      case _: Byte => 2
-      case _: Char => 3
-      case _: Short => 4
-      case _: Int => 5
-      case _: Long => 6
-      case _: Double => 7
-      case v: String if 128 > v.length => 8
-      case _: String => 9
-      case _: Map[_, _] => 100
-      case _: List[_] => 101
-      case _: Option[_] => 102
-      case _ => throw InvalidBinaryFormat
+      case _: Boolean ⇒ 1
+      case _: Byte ⇒ 2
+      case _: Char ⇒ 3
+      case _: Short ⇒ 4
+      case _: Int ⇒ 5
+      case _: Long ⇒ 6
+      case _: Double ⇒ 7
+      case v: String if 128 > v.length ⇒ 8
+      case _: String ⇒ 9
+      case _: Map[_, _] ⇒ 100
+      case _: List[_] ⇒ 101
+      case _: Option[_] ⇒ 102
+      case _ ⇒ throw InvalidBinaryFormat
     })
   }
 
   private[this] def writeAny(v: Any): Unit = {
     writeType(v)
     (v: @unchecked) match {
-      case v: Boolean => writeBoolean(v)
-      case v: Byte => writeByte(v)
-      case v: Char => writeChar(v)
-      case v: Short => writeShort(v)
-      case v: Int => writeInt(v)
-      case v: Long => writeLong(v)
-      case v: Double => writeDouble(v)
-      case v: String if 128 > v.length => writeShortString(v)
-      case v: String => writeString(v)
-      case v: Map[_, _] => writeMap(v.asInstanceOf[Map[String, Any]])
-      case v: List[_] => writeList(v.asInstanceOf[List[Any]])
-      case v: Option[_] => writeOption(v.asInstanceOf[Option[Any]])
-      case _ => throw InvalidBinaryFormat
+      case v: Boolean ⇒ writeBoolean(v)
+      case v: Byte ⇒ writeByte(v)
+      case v: Char ⇒ writeChar(v)
+      case v: Short ⇒ writeShort(v)
+      case v: Int ⇒ writeInt(v)
+      case v: Long ⇒ writeLong(v)
+      case v: Double ⇒ writeDouble(v)
+      case v: String if 128 > v.length ⇒ writeShortString(v)
+      case v: String ⇒ writeString(v)
+      case v: Map[_, _] ⇒ writeMap(v.asInstanceOf[Map[String, Any]])
+      case v: List[_] ⇒ writeList(v.asInstanceOf[List[Any]])
+      case v: Option[_] ⇒ writeOption(v.asInstanceOf[Option[Any]])
+      case _ ⇒ throw InvalidBinaryFormat
     }
   }
 
   private[this] def readAny: Any = {
     readByte match {
-      case 1 => readBoolean
-      case 2 => readByte
-      case 3 => readChar
-      case 4 => readShort
-      case 5 => readInt
-      case 6 => readLong
-      case 7 => readDouble
-      case 8 => readShortString
-      case 9 => readString
-      case 100 => readMap
-      case 101 => readList
-      case 102 => readOption
-      case invalid => throw InvalidBinaryFormat
+      case 1 ⇒ readBoolean
+      case 2 ⇒ readByte
+      case 3 ⇒ readChar
+      case 4 ⇒ readShort
+      case 5 ⇒ readInt
+      case 6 ⇒ readLong
+      case 7 ⇒ readDouble
+      case 8 ⇒ readShortString
+      case 9 ⇒ readString
+      case 100 ⇒ readMap
+      case 101 ⇒ readList
+      case 102 ⇒ readOption
+      case invalid ⇒ throw InvalidBinaryFormat
     }
   }
 
@@ -293,7 +293,7 @@ final class BinaryFormatByteBuffer(
     position += by
     p
   }
-  
+
   private[this] val initialposition = position
 
 }

@@ -2,7 +2,7 @@ package com.ibm.haploid
 
 package core
 
-import akka.actor.{ ActorSystem, Cancellable, Scheduler }
+import akka.actor.{ ActorSystem, Cancellable }
 import akka.dispatch.{ Future, MessageDispatcher }
 import akka.util.duration.longToDurationLong
 

@@ -1,0 +1,111 @@
+!----------------------------------------------------------
+!   DASSAULT SYSTEMES  -  V5 ENVIRONMENT FILE
+!   written by Transcat PLM myV5 application
+!----------------------------------------------------------
+! MODE : Global
+! TYPE : CATIA
+! ARGS : -cs CATIA -a global -icon no -menu no
+!----------------------------------------------------------------------
+! TreePath(1002,23,562,631,256,202) User='u62xz' Host='mndemucpc073392'
+!   - MAN Truck & Bus AG [X:\V5CFG, Muenchen]
+!   - R19SP06HF57
+!   - P_MN_CLASSIC 64BIT (B19SP06HF57)
+!   - CATIA
+!   + ScriptStart_WZB
+!   + ScriptStart_TCA
+!   * Standard+DER+WPE
+!----------------------------------------------------------
+V5LoadPath=C:\CATIAV5\B19SP06HF06\win_b64
+CATInstallPath=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64;C:\CATIAV5\B19SP06HF06\win_b64;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64;X:\V5CFG\CAA\LatticeConverter\V5R19_ConvPlugin_20091001\CATIAV5\Release\win_b64;X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\load\win_b64;X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64;X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\B19\win_b64;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64
+CATDLLPath=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\code\bin;C:\CATIAV5\B19SP06HF06\win_b64\code\bin;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64\code\bin;X:\V5CFG\CAA\LatticeConverter\V5R19_ConvPlugin_20091001\CATIAV5\Release\win_b64\code\bin;X:\V5CFG\CAA\PartSolutions\PSOL_5190024_20101005\win_b64\code\bin;X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\load\win_b64\code\bin;X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64\code\bin;X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\B19\win_b64\code\bin;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64\code\bin;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\code\bin
+CATICPath=C:\CATIAV5\B19SP06HF06\win_b64\code\productIC;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64\code\productIC;X:\V5CFG\CAA\LatticeConverter\V5R19_ConvPlugin_20091001\CATIAV5\Release\win_b64\code\productIC;X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64\code\productIC;X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\B19\win_b64\code\productIC;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64\code\productIC;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\code\productIC
+CATCommandPath=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\code\command;C:\CATIAV5\B19SP06HF06\win_b64\code\command;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\code\command
+CATDictionaryPath=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\code\dictionary;C:\CATIAV5\B19SP06HF06\win_b64\code\dictionary;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64\code\dictionary;X:\V5CFG\CAA\LatticeConverter\V5R19_ConvPlugin_20091001\CATIAV5\Release\win_b64\code\dictionary;X:\V5CFG\CAA\PartSolutions\PSOL_5190024_20101005\win_b64\code\dictionary;X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\load\win_b64\code\dictionary;X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64\code\dictionary;X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\B19\win_b64\code\dictionary;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64\code\dictionary;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\code\dictionary
+CATDocView=X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64\doc;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\doc
+CATReffilesPath=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\reffiles;X:\V5CFG\B19SP06HF06\Standard_MN\reffiles;C:\CATIAV5\B19SP06HF06\win_b64\reffiles;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64\reffiles;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64\reffiles;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\reffiles
+CATFontPath=C:\CATIAV5\B19SP06HF06\win_b64\resources\fonts;X:\V5CFG\B19SP06HF06\Standard_MN\fonts;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\fonts
+CATGalaxyPath=C:\CATIAV5\B19SP06HF06\win_b64\resources\galaxy;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\galaxy
+CATGraphicPath=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\resources\graphic;X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\resources\graphic\icons;C:\CATIAV5\B19SP06HF06\win_b64\resources\graphic;C:\CATIAV5\B19SP06HF06\win_b64\resources\graphic\icons;C:\CATIAV5\B19SP06HF06\win_b64\resources\graphic\figures;C:\CATIAV5\B19SP06HF06\win_b64\resources\graphic\splashscreens;C:\CATIAV5\B19SP06HF06\win_b64\resources\graphic\symbols;C:\CATIAV5\B19SP06HF06\win_b64\resources\graphic\textures;X:\V5CFG\MNMacroIcons\graphic\icons;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64\resources\graphic;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64\resources\graphic\icons;X:\V5CFG\CAA\LatticeConverter\V5R19_ConvPlugin_20091001\CATIAV5\Release\win_b64\resources\graphic;X:\V5CFG\CAA\LatticeConverter\V5R19_ConvPlugin_20091001\CATIAV5\Release\win_b64\resources\graphic\icons;X:\V5CFG\CAA\PartSolutions\PSOL_5190024_20101005\win_b64\resources\graphic\icons;X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\load\win_b64\resources\graphic;X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\load\win_b64\resources\graphic\icons;X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64\resources\graphic;X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64\resources\graphic\icons;X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\B19\win_b64\resources\graphic;X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\B19\win_b64\resources\graphic\icons;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64\resources\graphic;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64\resources\graphic\icons;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\graphic;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\graphic\icons;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\graphic\figures;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\graphic\splashscreens;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\graphic\symbols;X:\V5CFG\resources\graphic\textures;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\graphic\textures
+CATMsgCatalogPath=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\resources\msgcatalog;C:\CATIAV5\B19SP06HF06\win_b64\resources\msgcatalog;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64\resources\msgcatalog;X:\V5CFG\CAA\LatticeConverter\V5R19_ConvPlugin_20091001\CATIAV5\Release\win_b64\resources\msgcatalog;X:\V5CFG\CAA\PartSolutions\PSOL_5190024_20101005\win_b64\resources\msgcatalog;X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\load\win_b64\resources\msgcatalog;X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64\resources\msgcatalog;X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\B19\win_b64\resources\msgcatalog;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64\resources\msgcatalog;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\msgcatalog
+CATFeatureCatalogPath=C:\CATIAV5\B19SP06HF06\win_b64\resources\featurecatalog;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\featurecatalog
+CATDefaultCollectionStandard=C:\CATIAV5\B19SP06HF06\win_b64\resources\standard;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\resources\standard
+CATStartupPath=C:\CATIAV5\B19SP06HF06\win_b64\startup;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\startup
+CATW3ResourcesPath=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\docs;C:\CATIAV5\B19SP06HF06\win_b64\docs;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\docs
+CATReferenceSettingPath=X:\V5CFG\LicenseV5\Standard+DER+WPE;X:\V5CFG\B19SP06HF06\productive
+CATCollectionStandard=X:\V5CFG\B19SP06HF06\Standard_MN
+CATSharedWorkbookPath=%CATTemp%
+CATErrorLog=%CATTemp%\error.log
+CATMetasearchPath=%CATTemp%
+CATW3PublishPath=%CATTemp%
+CATReport=%CATTemp%\CATReport
+CATDisciplinePath=X:\V5CFG\B19SP06HF06\Standard_MN\MN_Tubing\EquipmentAndSystems\ProjectData
+CV5MNFreiVersion=MNFrei_111018
+CV5MNNetlineVersion=MNNetline_20100319
+CV5MNLCAHideShowVersion=MNLCAHideShow_110303
+CV5MNReconcilerVersion=MNReconciler_MSGBOX
+CV5MNXVLVersion=V5R19_ConvPlugin_20091001
+CV5MNBrennVersion=MNBrenn_100118
+CV5MNMTMVersion=MNMTM_110411
+CV5MNNCLTFVersion=MNNCLTF_000000
+CV5MNCumulatedDimensionStartVersion=MNCumulatedDimensionStart_20100215
+CV5MNOpenStartPartVersion=MNOpenStartPart_110515
+CV5MTBCloneVersion=MTBClone_120206
+CV5MNPipeVersion=MNPipe_2011
+CV5MTBToleranceVersion=MTBTolerance_120201
+licstandard=Standard
+ENVIRONMENTFILE=envCATIA
+USER_HOME=CSIDL_PERSONAL
+JAVA_HOME=C:\Documents and Settings\u62xz\Application Data\JAVA\jre6_64
+CLASSPATH_JDBC=
+CLASSPATH=
+PATH=X:\V5CFG\CAA\B19SP06HF57\20110103\win_b64\code\bin;C:\CATIAV5\B19SP06HF06\win_b64\code\bin;C:\CATIAV5\B19SP06HF06\win_b64\code\command;C:\Documents and Settings\u62xz\Application Data\JAVA\jre6_64\bin;%PATH%;X:\V5CFG\Oracle;X:\V5CFG\CAA\MAN\MAN_0009_20111011\win_b64\code\bin;X:\V5CFG\CAA\LatticeConverter\V5R19_ConvPlugin_20091001\CATIAV5\Release\win_b64\code\bin;X:\V5CFG\CAA\PartSolutions\PSOL_5190024_20101005\win_b64\code\bin;X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\load\win_b64\code\bin;X:\V5CFG\CAA\Ty3ToCatia\V5R19_0001_20090929\B19\vision-numeric\win_b64\code\bin;X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\B19\win_b64\code\bin;X:\V5CFG\CAA\ODXM\20111014_PRODUKTIV\B19\win_b64\code\bin;X:\V5CFG\CAA\MNNCLTF\V5R19_0006_20100830\win_b64\code\bin;X:\V5CFG\dot_net_applications\MNNCLTF\0001_20100210
+CATNoStartDocument=no
+CNEXTSPLASHSCREEN=no
+VaultClient_PropertiesFileName=VaultClient.properties
+VaultClient_PropertiesFilePath=X:\V5CFG\LCA\B19SP06HF57\P_MN_CLASSIC\MUC
+QCADMIN=X:\V5CFG\CAA\QCHECKER\qchecker_profiles_user
+APPDATA=C:\Documents and Settings\u62xz\Application Data
+CATKnowledgePath=C:\CATIAV5\B19SP06HF06\win_b64\resources\knowledge
+CATReconcilePath=
+MN_ATTRIBUTE_MAP=X:\V5CFG\LCA\B19SP06HF57\P_MN_CLASSIC
+MN_LIB_PATH=X:\V5CFG\LIBRARY
+CV5DrawstandardsPath=X:\V5CFG\LIBRARY\Startteile
+CV5OptionsPath=X:\V5CFG\LIBRARY\optionsdateien
+CV5NETLINEOptionsPath=X:\V5CFG\LIBRARY\Optionsdateien
+CV5MNFar=X:\V5CFG\LIBRARY\VB\Anwender\Farb
+CV5_VISPRDMODE_ACTIVATE=1
+DRWReroutOnUpPrdInst=1
+ENOVIA_USER_ROLE=Structure
+CATLM_ODTS=client
+IRD_PRODUCTTOPART=1
+SMD_NEW_WORKBENCH_ACCESS=1
+PCS_FINAL_OPEN=1
+GetOwnedObjectsBatch=1
+JLJ_CONTEXT_FILE=X:\V5CFG\B19SP06HF57\P_MN_CLASSIC\properties\jndi.properties
+CV5TitleBlockXml=X:\V5CFG\CAA\MAN\XML_MAN_0009_20101221
+Startup_Directory=X:\V5CFG\B19SP06HF06\Standard_MN\MN_Tubing\EquipmentAndSystems
+CV5StartCATDrawing=X:\V5CFG\LIBRARY\Startteile\Start_CATDrawing_5123.CATDrawing
+MTBClone2Dpath=X:\V5CFG\LIBRARY\VB\MTBClone_120206
+MTBClone2DQCprofile=MTBClone2D
+CNS_CAA=win_b64
+QCPATH=X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519
+QCDOC=X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\docV5
+QCHTML=X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\htmlV5
+QCLOAD=X:\V5CFG\CAA\QCHECKER\V5R19_qchecker2161_110519\load\win_b64\code\bin
+QCUSER=%CATTemp%\QCUSER
+QCREPORT=%CATTemp%\QCREPORT
+QCLICDB=YES
+QCLICGEO=YES
+QCLICSTR=YES
+QCLANGCAT=NO
+QCGUI=V2
+QCBATCH=V1
+QCLICEXPIRYALERT=1
+VNGVTYPE_LICENSE_FILE=27030@mndemucpc039263
+ENV_TKL_CATIA=X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\
+ENV_TKL_HELP=X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\Documents
+ENV_TKL_TUTORIALS=X:\V5CFG\CAA\GeomCaliper\R19_V24_20100217\win_b64\Documents
+GSSL_LICENSE_FILE=27000@MNDEMUCPC089659
+NCLTFHelp=X:\V5CFG\LIBRARY\Optionsdateien\NCLTF\NCLTFDocu
+NCLTFTemplates=X:\V5CFG\LIBRARY\Optionsdateien\NCLTF\NCLTFTemplates
+ifor_config=x:\v5cfg\lum\i4ls.ini

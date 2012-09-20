@@ -6,9 +6,19 @@ package util
 
 import java.io.{ StringWriter, PrintWriter, OutputStreamWriter, ByteArrayOutputStream }
 
+import org.apache.commons.codec.binary.Base64
+
 import io.Base64OutputStream
 
 package object text {
+
+  /**
+   * Convert input to readable output if input is base64-encoded else return input.
+   */
+  def fromBase64String(in: String, charset: String): String = {
+    val inbytes = in.getBytes
+    if (Base64.isBase64(inbytes)) new String(Base64.decodeBase64(inbytes), charset) else in
+  }
 
   /**
    * Convert the stack trace of a Throwable into a string.
@@ -35,7 +45,7 @@ package object text {
    * Returns true if s represents a numeric value (ie. an Int, a Long or a Double)
    */
   def isNumber(s: String): Boolean = {
-    try { val d = s.toDouble; true } catch { case _ => false }
+    try { val d = s.toDouble; true } catch { case _: Throwable ⇒ false }
   }
 
   /**

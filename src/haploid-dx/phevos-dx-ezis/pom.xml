@@ -7,7 +7,7 @@
 	<groupId>eu.man</groupId>
 	<artifactId>phevos-dx-ezis</artifactId>
 
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.7-SNAPSHOT</version>
 
 	<name>phevos-dx-ezis</name>
 	<description>Connection methods for getting unstamped TIFFs from EZIS</description>
@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>com.ibm.haploid</groupId>
 		<artifactId>haploid-maven3</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 
 	<scm>
@@ -28,9 +28,9 @@
 			<artifactId>maven-plugin-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.ibm.haploid</groupId>
-			<artifactId>haploid-core</artifactId>
-			<version>1.0.4-SNAPSHOT</version>
+			<groupId>eu.man</groupId>
+			<artifactId>phevos-dx-util</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

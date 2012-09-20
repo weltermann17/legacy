@@ -78,8 +78,8 @@ class Compiler(code: String, dir: File = null) {
   private class Interpreter {
 
     val outputdirectory = directory match {
-      case Some(d) => AbstractFile.getDirectory(d)
-      case None => new VirtualDirectory("virtual", None)
+      case Some(d) ⇒ AbstractFile.getDirectory(d)
+      case None ⇒ new VirtualDirectory("virtual", None)
     }
 
     val settings = {
@@ -111,7 +111,7 @@ class Compiler(code: String, dir: File = null) {
     val classloader = new AbstractFileClassLoader(outputdirectory, this.getClass.getClassLoader)
 
     def apply[T](code: String) = {
-	  if (config.getBoolean("haploid.config-scala.log-code-on-compile")) info(Compiler.this.code)
+      if (config.getBoolean("haploid.config-scala.log-code-on-compile")) info(Compiler.this.code)
       val run = new global.Run
       val source = List(new BatchSourceFile("", code))
       run.compileSources(source)
@@ -120,7 +120,7 @@ class Compiler(code: String, dir: File = null) {
 
     def fromExisting[T] = {
       val c = classloader.loadClass(classname)
-      c.getConstructor().newInstance().asInstanceOf[() => T].apply().asInstanceOf[T]
+      c.getConstructor().newInstance().asInstanceOf[() ⇒ T].apply().asInstanceOf[T]
     }
 
     def copyResource(resource: String, directory: File) = {
@@ -131,7 +131,7 @@ class Compiler(code: String, dir: File = null) {
     }
 
   }
-  
+
   private def info(message: String) = {
     if (null != logger) logger.info(message) else print(message)
   }
@@ -140,7 +140,7 @@ class Compiler(code: String, dir: File = null) {
     if (null != logger) logger.error(message) else println(message)
   }
 
-  private val directory = dir match { case null => None case d => Some(d) }
+  private val directory = dir match { case null ⇒ None case d ⇒ Some(d) }
   private lazy val md5 = MD5(code)
   private lazy val classname = "Compiler" + md5
   private lazy val classfile = directory.get.toPath.resolve(classname + ".class").toFile

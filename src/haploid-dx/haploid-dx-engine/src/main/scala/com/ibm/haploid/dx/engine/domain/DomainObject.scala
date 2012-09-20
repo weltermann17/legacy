@@ -21,7 +21,7 @@ import event.Exists
  */
 abstract class DomainObject
 
-  extends Marshaled
+  extends Marshaled with Serializable
 
 /**
  *
@@ -46,27 +46,28 @@ abstract class DomainObjectFSM[Data](
   with LoggingFSM[DomainObjectState, Data] {
 
   val journal = inject[ActorRef]('journal)
+  lazy val relauncher = actorFor(journal.path.toString + "/relauncher")
 
   override def logDepth = 0
 
-  protected[this] def actorFor(path: String): ActorRef = actorFor(path, retriesduringcreate)
-
-  protected[this] def actorFor(path: String, retries: Int): ActorRef = {
-    val receiver = context.actorFor(path)
-    try {
-      Await.result(receiver ? Exists, defaulttimeout.duration)
-      receiver
-    } catch {
-      case _ ⇒
-        log.debug("actorFor " + retries + " " + path + " " + receiver)
-        Thread.sleep(pauseduringcreate)
-        if (0 < retries) {
-          actorFor(path, retries - 1)
-        } else {
-          log.error("actorFor failed " + path + " " + receiver)
-          context.system.deadLetters
-        }
+  protected[this] def actorFor(path: String): ActorRef = try {
+    var retries = retriesduringcreate
+    while (-1 < retries) {
+      retries -= 1
+      val receiver = context.actorFor(path)
+      try {
+        Await.result(receiver ? Exists, defaulttimeout.duration)
+        return receiver
+      } catch {
+        case e: Throwable ⇒
+          Thread.sleep(pauseduringcreate)
+      }
     }
+    throw new Exception(self.path.toString + " actorFor failed : " + path)
+  } catch {
+    case e: Throwable ⇒
+      log.error(self.path.toString + " actorFor failed : " + path)
+      throw new Exception(self.path.toString + " actorFor failed : " + path)
   }
 
   protected[this] def ignore: StateFunction = {
@@ -78,7 +79,13 @@ abstract class DomainObjectFSM[Data](
 
   when(Active)(ignore)
 
-  whenUnhandled(ignore)
+  whenUnhandled {
+    ignore orElse {
+      case event @ Event(_, _) ⇒
+        log.error("Unhandled event : self = " + self.path + ", state = " + stateName + ", event = " + event)
+        stay
+    }
+  }
 
 }
 

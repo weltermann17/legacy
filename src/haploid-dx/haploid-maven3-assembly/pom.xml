@@ -7,7 +7,7 @@
 	<groupId>com.ibm.haploid</groupId>
 	<artifactId>haploid-maven3-assembly</artifactId>
 
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.7-SNAPSHOT</version>
 
 	<name>haploid-maven3-assembly</name>
 	<description>Useful descriptors for the maven-assembly-plugin.</description>

@@ -28,13 +28,13 @@ package object json {
   /**
    * We dropped our own implementation of a json/jackson wrapper for Jerkson and added small thinks like prettyPrint.
    */
-  
+
   object Json extends com.codahale.jerkson.Json {
-    
+
     def prettyPrint[A](a: A): String = {
-      mapper.writerWithDefaultPrettyPrinter.writeValueAsString(a)      
+      mapper.writerWithDefaultPrettyPrinter.writeValueAsString(a)
     }
-    
+
   }
-  
+
 }

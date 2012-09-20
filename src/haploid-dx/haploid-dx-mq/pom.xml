@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<packaging>jar</packaging>
+
+	<artifactId>haploid-dx-mq</artifactId>
+
+	<version>1.0.7-SNAPSHOT</version>
+
+	<name>haploid-dx-mq</name>
+	<description>Base interface to a JMS MQ service for the phevos-dx framework.</description>
+
+	<parent>
+		<groupId>com.ibm.haploid</groupId>
+		<artifactId>haploid-maven3</artifactId>
+		<version>1.0.7-SNAPSHOT</version>
+	</parent>
+
+	<scm>
+		<developerConnection>scm:git:ssh://git@mndemucpenon.mn-man.biz/${project.name}.git</developerConnection>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-compiler</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-actor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.haploid</groupId>
+			<artifactId>haploid-core</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.sun</groupId>
+  			<artifactId>connector</artifactId>
+  			<version>1.3.0</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.sun</groupId>
+  			<artifactId>jta</artifactId>
+  			<version>1.2</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.ibm</groupId>
+  			<artifactId>mq</artifactId>
+  			<version>7.1.0.0</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.ibm.mq</groupId>
+  			<artifactId>commonservices</artifactId>
+  			<version>7.1.0.0</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.ibm.mq</groupId>
+  			<artifactId>headers</artifactId>
+  			<version>7.1.0.0</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.ibm.mq</groupId>
+  			<artifactId>jmqi</artifactId>
+  			<version>7.1.0.0</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.ibm.mq</groupId>
+  			<artifactId>pcf</artifactId>
+  			<version>7.1.0.0</version>
+		</dependency>				
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+

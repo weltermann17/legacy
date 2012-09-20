@@ -13,7 +13,7 @@ trait OnlyOnce {
   /**
    * May be used at only one location in the extending class, but called many times and from different threads, of course.
    */
-  def onlyonce(p: => Unit) = {
+  def onlyonce(p: ⇒ Unit) = {
     if (!done.get) {
       try {
         doing.lock

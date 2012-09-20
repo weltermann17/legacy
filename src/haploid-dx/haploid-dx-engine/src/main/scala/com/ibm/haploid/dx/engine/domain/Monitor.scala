@@ -27,14 +27,24 @@ import binding.ElementsAdapter
 abstract class Monitor[A]
 
   extends DomainObject {
-
-  @XmlAttribute(required = true) def getSize = getElements.length
+  
+  private[this] var _size: Option[Int] = None
+  
+  private[this] var elements: Seq[A] = Vector.empty
+  
+  @XmlAttribute(required = true) def getSize = this._size match {
+    case Some(i) => i
+    case None => getElements.length
+  }
 
   @XmlJavaTypeAdapter(classOf[ElementsAdapter[Monitor[A]]]) def getElements = elements
 
   def add(element: A) = elements = elements :+ element
-
-  private[this] var elements: Seq[A] = Vector.empty
+  
+  def withSize(size: Int) = {
+  	_size = Some(size)
+  	this
+  }
 
 }
 
@@ -60,9 +70,24 @@ trait MonitorFSM[M]
   extends DomainObjectFSM[MonitorData] {
 
   whenUnhandled {
-    case Event(collect @ Collect(collector), data) if data.isInstanceOf[Elements] ⇒
-      collector ! data
-      data.asInstanceOf[Elements].elements.foreach(_ ! collect)
+    case Event(collect @ Collect(collector, depth), data) if data.isInstanceOf[Elements] ⇒
+      collector ! CollectResult(data, depth match {
+        case Some(i) if i > 1 ⇒
+          data.asInstanceOf[Elements].elements.size
+        case None =>
+          data.asInstanceOf[Elements].elements.size
+        case _ ⇒
+          0
+      }, Some(data.asInstanceOf[Elements].elements.size))
+
+      depth match {
+        case Some(i) if i > 1 ⇒
+          data.asInstanceOf[Elements].elements.foreach(_ ! Collect(collector, Some(i - 1)))
+        case None =>
+          data.asInstanceOf[Elements].elements.foreach(_ ! Collect(collector, None))
+        case _ ⇒
+      }
+
       stay
   }
 

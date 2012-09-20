@@ -6,6 +6,8 @@ package engine
 
 package domain
 
+import core.newLogger
+
 import java.io.OutputStream
 
 import javax.xml.bind.{ Marshaller, JAXBContext }
@@ -22,16 +24,18 @@ package object marshalling {
 
   val formattedoutputjson = getBoolean("haploid.dx.engine.domain.marshalling.formatted-output-json")
 
-  val classeswithjaxbbindings = try {
+  val classeswithjaxbbindings = {
     (getStringList("haploid.dx.engine.domain.marshalling.classes-with-jaxb-bindings").toList ++
       getStringList("haploid.dx.engine.domain.marshalling.custom-classes-with-jaxb-bindings").toList)
-      .map(c => Class.forName(c))
+      .map(c ⇒ try {
+        Class.forName(c)
+      } catch {
+        case e: Throwable ⇒
+          newLogger(this).error("Class not found: " + c)
+          throw e
+      })
       .toArray
       .asInstanceOf[Array[Class[_]]]
-  } catch {
-    case e => 
-      e.printStackTrace
-      throw e
   }
 
   val jsonconfig = JSONConfiguration

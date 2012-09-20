@@ -8,21 +8,18 @@ package event
 
 import java.nio.file.Path
 
-import javax.xml.bind.annotation.{ XmlType, XmlRootElement, XmlElement, XmlAttribute }
-
-import akka.actor.{ ActorRef, ActorPath }
-
 import com.ibm.haploid.core.service.Result
+import com.ibm.haploid.dx.engine.domain.binding.{xmlAttribute, xmlJavaTypeAdapter, xmlElement, xmlAnyElement}
+import com.ibm.haploid.dx.engine.domain.binding.{StringOptionAdapter, ResultAdapter, AnyAdapter, ActorPathAdapter}
+import com.ibm.haploid.dx.engine.domain.flow.ExecutionDetail
 import com.ibm.haploid.dx.engine.domain.marshalling.Marshaled
 
-import core.service.{ Success, Failure }
+import akka.actor.{ActorRef, ActorPath}
 import core.util.Uuid.newUuid
-import core.util.text.stackTraceToBase64
 import core.util.time.now
-
-import domain.operating.{ SimpleOperationResultDetail, OperationResultDetail, OperationFailed, OperationDetail }
-import domain._
-import domain.binding._
+import domain.operating.{OperationResultDetail, OperationDetail}
+import domain.{TaskDetail, JobDetail}
+import javax.xml.bind.annotation.{XmlType, XmlRootElement, XmlAttribute}
 
 /**
  *
@@ -59,6 +56,8 @@ sealed trait PersistentEvent
 
   private[engine] def redo = _online = false
 
+  private[engine] def relaunch = _online = true
+
   private[this] var _online = true
 
   @XmlAttribute(required = true) def getId = id
@@ -71,17 +70,15 @@ sealed trait PersistentEvent
 @XmlType(propOrder = Array("receiver", "event"))
 case class ReceiverEvent(
 
-  receiver: ActorPath,
+  @xmlJavaTypeAdapter(classOf[ActorPathAdapter]) receiver: ActorPath,
 
-  @xmlAnyElement event: PersistentEvent)
+  @xmlAnyElement(lax = true) event: PersistentEvent)
 
   extends Marshaled {
 
   def this() = this(null.asInstanceOf[ActorPath], null.asInstanceOf[PersistentEvent])
 
   def this(path: String, event: PersistentEvent) = this(ActorPath.fromString("akka://default/user" + path), event)
-
-  @XmlAttribute(required = true) def getReceiver = receiver.toString
 
 }
 
@@ -104,17 +101,25 @@ case object JobEvent extends JobEvent
  *
  */
 @XmlRootElement(name = "job-create-event")
-@XmlType(propOrder = Array("job", "detail"))
+@XmlType(propOrder = Array("counter", "detail", "trigger"))
 case class JobCreate(
 
-  @xmlAttribute(required = true) job: Class[_ <: JobFSM],
+  @xmlElement(required = true) detail: JobDetail,
 
-  @xmlElement(required = true) detail: JobDetail)
+  @xmlJavaTypeAdapter(classOf[StringOptionAdapter]) trigger: Option[String] = None)
 
-  extends JobEvent {
+  extends JobEvent 
+  
+  with ExecutionCreate {
 
-  def this() = this(null, null)
+  def this() = this(null, None)
 
+  val name = id
+
+  @xmlAttribute(required = true) def getCounter = _counter
+
+  private[engine] var _counter = -1
+  
 }
 
 /**
@@ -122,16 +127,48 @@ case class JobCreate(
  */
 sealed trait TaskEvent extends PersistentEvent
 
-case object TaskEvent extends TaskEvent
+/**
+ * sent from Task to its parent Job
+ */
+@XmlRootElement(name = "task-result-event")
+case class TaskResult(
+
+  @xmlJavaTypeAdapter(classOf[ResultAdapter]) val result: Result[Any])(implicit 
+      
+  @xmlJavaTypeAdapter(classOf[ActorPathAdapter]) val sender: ActorPath)
+
+  extends ExecutionResult
+
+  with TaskEvent {
+
+  def this() = this(null)(null)
+
+}
+
+/**
+ * sent from Task to its parent Job
+ */
+@XmlRootElement(name = "job-result-event")
+case class JobResult(
+
+  @xmlJavaTypeAdapter(classOf[ResultAdapter]) val result: Result[Any])(implicit 
+      
+  @xmlJavaTypeAdapter(classOf[ActorPathAdapter]) val sender: ActorPath)
+
+  extends ExecutionResult
+
+  with TaskEvent {
+
+  def this() = this(null)(null)
+
+}
 
 /**
  *
  */
 @XmlRootElement(name = "task-create-event")
-@XmlType(propOrder = Array("task", "name", "job", "detail"))
+@XmlType(propOrder = Array("name", "job", "detail"))
 case class TaskCreate(
-
-  @xmlAttribute(required = true) task: Class[_ <: TaskFSM],
 
   @xmlElement(required = true) job: JobCreate,
 
@@ -139,18 +176,76 @@ case class TaskCreate(
 
   @xmlElement(required = true) detail: TaskDetail)
 
-  extends TaskEvent {
+  extends TaskEvent
 
-  def this() = this(null, null, null, null)
+  with ExecutionCreate {
+
+  def this() = this(null, null, null)
+
+}
+
+sealed trait ExecutionEvent extends PersistentEvent
+
+trait ExecutionResult
+
+  extends ExecutionEvent {
+
+  val result: Result[Any]
+
+  val sender: ActorPath
+
+}
+
+object ExecutionResult {
+
+  def unapply(er: ExecutionResult): Option[Result[Any]] = {
+    er match {
+      case DefaultExecutionResult(result) ⇒
+        Some(result)
+      case TaskOperationResult(result) ⇒
+        Some(result)
+      case TaskResult(result) ⇒
+        Some(result)
+      case JobResult(result) ⇒
+        Some(result)
+      case _ ⇒
+        None
+    }
+  }
+
+}
+
+@XmlRootElement(name = "default-execution-result-event")
+case class DefaultExecutionResult(
+
+  @xmlJavaTypeAdapter(classOf[ResultAdapter]) val result: Result[Any])(implicit 
+      
+  @xmlJavaTypeAdapter(classOf[ActorPathAdapter]) val sender: ActorPath)
+
+  extends ExecutionResult {
+
+  def this() = this(null)(null)
+
+}
+
+sealed trait ExecutionCreate extends ExecutionEvent {
+
+  val name: String
+
+  val detail: ExecutionDetail
 
 }
 
 /**
  *
  */
-sealed trait OperationEvent extends PersistentEvent
+@XmlRootElement(name = "execution-start-event")
+case class ExecutionStartEvent() extends ExecutionEvent
 
-case object OperationEvent extends OperationEvent
+/**
+ *
+ */
+sealed trait OperationEvent extends PersistentEvent
 
 /**
  *
@@ -163,33 +258,80 @@ case class OperationCreate(
 
   @xmlAttribute(required = true) name: String,
 
-  @xmlElement(required = true) detail: OperationDetail)
+  @xmlAnyElement(lax = true) detail: OperationDetail)
 
-  extends OperationEvent {
+  extends OperationEvent with ExecutionCreate {
 
   def this() = this(null, null, null)
 
 }
 
+@XmlRootElement(name = "reset-event")
+case class Reset(
+
+  @xmlElement(required = true) force: Boolean)
+
+  extends PersistentEvent {
+
+  def this() = this(false)
+
+}
+
+@XmlRootElement(name = "reset-ack-event")
+case class ResetAck(
+
+  @xmlElement(required = true) force: Boolean)
+
+  extends PersistentEvent {
+
+  def this() = this(false)
+
+}
+
 /**
- *
+ * sent from Operator to Operation
  */
 @XmlRootElement(name = "operation-result-event")
-@XmlType(propOrder = Array("result"))
+@XmlType(propOrder = Array("detail"))
 case class OperationResult(
 
-  result: Result[Any])
+  @xmlElement detail: OperationResultDetail)
 
   extends OperationEvent {
 
   def this() = this(null)
 
-  @XmlElement(required = true) def getResult = result match {
-    case Success(details) if details.isInstanceOf[OperationResultDetail] => details
-    case Success(details) => SimpleOperationResultDetail(true, details.toString)
-    case Failure(OperationFailed(details)) => details
-    case Failure(throwable) => SimpleOperationResultDetail(false, stackTraceToBase64(throwable))
-  }
+}
+
+/**
+ * sent from Operation to its parent Task
+ */
+@XmlRootElement(name = "task-operation-result-event")
+case class TaskOperationResult(
+
+  @xmlJavaTypeAdapter(classOf[ResultAdapter]) val result: Result[Any])(implicit 
+      
+  @xmlJavaTypeAdapter(classOf[ActorPathAdapter]) val sender: ActorPath)
+
+  extends ExecutionResult
+
+  with OperationEvent {
+
+  def this() = this(null)(null)
+}
+
+/**
+ * Sent by a parent Task on one of its Operations
+ */
+@XmlRootElement(name = "execute")
+@XmlType
+case class Execute(
+    
+		@xmlJavaTypeAdapter(classOf[AnyAdapter]) input: Any)
+
+  extends PersistentEvent {
+
+  def this() = this(null)
 
 }
 
@@ -200,14 +342,18 @@ case object Redo extends TransientEvent
 
 case object Exists extends TransientEvent
 
-case class Collect(collector: ActorRef) extends TransientEvent
+case class Collect(collector: ActorRef, depth: Option[Int] = None) extends TransientEvent
 
-case object Execute extends TransientEvent
+case class CollectResponse(data: Any, count: Int) extends TransientEvent
 
 /**
  * Transient events for operation handling.
  */
 
-case class OperationExecute(operation: OperationCreate, basedirectory: Path) extends TransientEvent
+/**
+ * Sent from an Operation to its Operator
+ */
+case class OperationExecute(operation: OperationCreate, basedirectory: Path, input: Any)
 
+  extends TransientEvent
 

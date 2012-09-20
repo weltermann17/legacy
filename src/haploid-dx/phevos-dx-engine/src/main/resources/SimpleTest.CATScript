@@ -1,0 +1,15 @@
+Sub CATMain()
+On Error Resume Next
+CATIA.Interactive = False
+CATIA.DisplayFileAlerts = False
+CATIA.RefreshDisplay = False
+Rem MsgBox("Wie doof ist das denn ...")
+CATIA.SystemService.print("This is the first message from CATIA")
+Set documents1 = CATIA.Documents
+Set partDocument1 = documents1.Add("Part")
+Set partDocument1 = CATIA.ActiveDocument
+partDocument1.SaveAs "c:\temp\Part1.CATPart"
+partDocument1.Close
+CATIA.SystemService.print("Good bye.")
+CATIA.Quit
+End Sub

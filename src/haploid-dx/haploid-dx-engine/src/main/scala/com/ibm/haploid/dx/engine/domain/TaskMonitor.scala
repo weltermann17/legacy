@@ -6,14 +6,19 @@ package engine
 
 package domain
 
-import javax.xml.bind.annotation.{ XmlType, XmlRootElement, XmlAccessorType }
+import javax.xml.bind.annotation.XmlRootElement
 
-import akka.actor._
-import akka.dispatch._
+import akka.actor.{ SupervisorStrategy, Props, OneForOneStrategy, ActorRef }
 
 import core.inject.BindingModule
-import event._
-import journal.JournalEntry
+import core.util.text.stackTraceToString
+
+import event.{ TaskCreate, JobCreate }
+
+/**
+ *
+ */
+case class TaskClass(taskclass: Class[_ <: TaskFSM], name: String)
 
 /**
  *
@@ -41,14 +46,24 @@ class TaskMonitorFSM(
 
   extends MonitorFSM[Task] {
 
+  override val supervisorStrategy = OneForOneStrategy() {
+    case _: Throwable ⇒ SupervisorStrategy.Stop
+  }
+
   startWith(Active, Tasks(Vector.empty))
 
   when(Active) {
-    case Event(create @ TaskCreate(task, _, name, _), Tasks(tasks)) =>
-      val t = context.actorOf(Props(
-        task.getConstructors()(0).newInstance(create, bindingmodule).asInstanceOf[TaskFSM]),
-        name = name)
-      stay using Tasks(tasks :+ t)
+    case Event(create @ TaskCreate(_, name, detail), Tasks(tasks)) ⇒
+      try {
+        val t = context.actorOf(Props(
+          taskclasses.get(detail.name).get.taskclass.getConstructors()(0).newInstance(create, bindingmodule).asInstanceOf[BaseTaskFSM[_]]),
+          name = name)
+        stay using Tasks(tasks :+ t)
+      } catch {
+        case e: Throwable ⇒
+          log.error(stackTraceToString(e))
+          throw e
+      }
   }
 
   initialize

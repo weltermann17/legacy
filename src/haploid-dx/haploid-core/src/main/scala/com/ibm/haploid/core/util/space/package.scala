@@ -20,6 +20,8 @@ package core
 
 package util
 
+// import language.implicitConversions
+
 /**
  * Utilities to ease the handling of space values like bytes and megabytes and converting them.
  */
@@ -32,5 +34,5 @@ package object space {
 
   implicit def int2SpaceUnit(value: Int) = com.twitter.conversions.storage.intToStorageUnitableWholeNumber(value)
   implicit def long2SpaceUnit(value: Long) = com.twitter.conversions.storage.longToStorageUnitableWholeNumber(value)
-  
+
 }

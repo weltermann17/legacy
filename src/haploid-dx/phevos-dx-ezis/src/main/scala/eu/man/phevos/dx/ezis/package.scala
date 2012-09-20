@@ -22,15 +22,5 @@ package object ezis {
 
   val unstampedprog = getString("phevos.dx.ezis.unstamped.prog")
 
-  val ezisstampedpath = getString("phevos.dx.ezis.stamped.ezispath")
-
-  val ezisstampedusername = getString("phevos.dx.ezis.stamped.ezisusername")
-
-  val ezisstampedpassword = getString("phevos.dx.ezis.stamped.ezispassword")
-
-  val ezisstampeduser = getString("phevos.dx.ezis.stamped.ezisuser")
-
-  val stampedprog = getString("phevos.dx.ezis.stamped.prog")
-
 }
 

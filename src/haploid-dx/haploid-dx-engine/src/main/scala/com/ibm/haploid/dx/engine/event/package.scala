@@ -13,5 +13,5 @@ package object event {
 
   val usecompressionduringserialization = getBoolean("haploid.dx.engine.event.use-compression-during-serialization")
 
-} 
+}
 

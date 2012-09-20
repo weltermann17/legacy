@@ -6,7 +6,7 @@
 
 	<artifactId>haploid-selfextractor</artifactId>
 
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.7-SNAPSHOT</version>
 
 	<name>haploid-selfextractor</name>
 	<description>Add this component to your application to deliver a self-extracting executable-jar.</description>
@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.ibm.haploid</groupId>
 		<artifactId>haploid-maven3</artifactId>
-		<version>1.0.3</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 
 	<scm>

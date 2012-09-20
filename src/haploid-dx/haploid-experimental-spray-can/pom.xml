@@ -1,27 +1,23 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<packaging>jar</packaging>
 
 	<artifactId>haploid-experimental-spray-can</artifactId>
 
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.7-SNAPSHOT</version>
 
-	<name>haploid-template-jar-exe</name>
-	<description>A simple spray/ spray-can hello world application.</description>
+	<name>haploid-experimental-spray-can</name>
+	<description>A simple spray-can library.</description>
 
 	<properties>
-		<transformer.mainClass>
-			com.ibm.haploid.bootstrapper.Main
-		</transformer.mainClass>
 	</properties>
 
 	<parent>
 		<groupId>com.ibm.haploid</groupId>
 		<artifactId>haploid-maven3</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 
 	<scm>
@@ -38,6 +34,16 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.ibm.haploid</groupId>
+			<artifactId>haploid-bootstrapper</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.haploid</groupId>
+			<artifactId>haploid-core</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-actor</artifactId>
 		</dependency>
@@ -48,6 +54,14 @@
 		<dependency>
 			<groupId>cc.spray</groupId>
 			<artifactId>spray-can</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>cc.spray</groupId>
+			<artifactId>spray-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>cc.spray</groupId>
+			<artifactId>spray-util</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -62,24 +76,13 @@
 			<artifactId>scala-library</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.ibm.haploid</groupId>
-			<artifactId>haploid-bootstrapper</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.scalastuff</groupId>
 			<artifactId>scalabeans</artifactId>
-			<version>0.1</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.dstovall</groupId>
-				<artifactId>onejar-maven-plugin</artifactId>
-			</plugin>
-
 			<plugin>
 				<groupId>org.scala-tools</groupId>
 				<artifactId>maven-scala-plugin</artifactId>

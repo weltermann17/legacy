@@ -6,23 +6,25 @@ package dx
 
 package util
 
+import scala.xml.PrettyPrinter
+
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import com.ibm.haploid.core.config
-import com.ibm.haploid.core.logger
 
-import scala.xml._
+import eu.man.phevos.dx.util.interfaces.MTBPartIndexOrdering
 
 @Test private class UtilTest {
 
-  @Test def test1 = {
-    println(dummy)
-    assertTrue("application" == dummy)
+  @Test def testOrdering = {
+
+    println(MTBPartIndexOrdering("_A_").compare("_A_"))
+    assertTrue(MTBPartIndexOrdering("_A_") == "_A_")
+
   }
 
   @Test def testGetRecentFileAsString = {
 
-    val client = new FTP
+    val client = new FtpConnector
     if (client.isConnected) {
       val filename = client.getRecentFile
       println("recent file name : " + filename)
@@ -40,7 +42,7 @@ import scala.xml._
 
   @Test def testGetRecentFileAsXML = {
 
-    val client = new FTP
+    val client = new FtpConnector
     if (client.isConnected) {
       val filename = client.getRecentFile
       println("recent file name : " + filename)

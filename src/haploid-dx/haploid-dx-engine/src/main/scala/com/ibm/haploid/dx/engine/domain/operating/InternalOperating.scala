@@ -16,17 +16,17 @@ import event.OperationCreate
  *
  */
 trait InternalOperationFSM {
-  
-  self: OperationFSM => 
-  
+
+  self: OperationFSM ⇒
+
 }
 
 /**
  *
  */
 trait InternalOperatorFSM {
-  
-  self: OperatorFSM => 
-  
+
+  self: OperatorFSM ⇒
+
 }
 

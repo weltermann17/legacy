@@ -57,11 +57,19 @@ class MoveOperator(
 
   extends OperatorBase {
 
-  protected[this] def doPreProcessing(input: ProcessResult) = { input }
+  type PreProcessingInput = Unit
 
-  protected[this] def doProcessing(input: ProcessResult) = { input }
+  type ProcessingInput = Unit
 
-  protected[this] def doPostProcessing(input: ProcessResult) = { input }
+  type PostProcessingInput = Unit
+
+  type PostProcessingOutput = Unit
+
+  protected[this] def doPreProcessing(input: Unit) = Success(input)
+
+  protected[this] def doProcessing(input: Unit) = Success(input)
+
+  protected[this] def doPostProcessing(input: Unit) = Success(input)
 
 }
 

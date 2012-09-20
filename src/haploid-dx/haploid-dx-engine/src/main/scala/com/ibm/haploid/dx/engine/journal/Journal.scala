@@ -6,8 +6,10 @@ package engine
 
 package journal
 
+import javax.xml.bind.annotation.{ XmlType, XmlRootElement }
+
 import akka.actor.actorRef2Scala
-import akka.actor.Actor
+import akka.actor.{ ActorRef, Actor }
 import akka.event.Logging
 
 import event.{ Redo, ReceiverEvent }
@@ -30,13 +32,13 @@ trait Journal
 
   def receive = {
 
-    case Redo ⇒ redo; sender ! ()
+    case Redo ⇒ redo(sender)
 
     case ReceiverEvent(r, e) ⇒ doAppend(ReceiverEvent(r, e)); sender ! ()
 
   }
 
-  protected[this] def redo
+  protected[this] def redo(sender: ActorRef)
 
   protected[this] def doAppend(receiverevent: ReceiverEvent)
 

@@ -9,9 +9,9 @@ package object inject {
 
   type Injectable = org.scala_tools.subcut.inject.Injectable
 
-  type BindingModule = org.scala_tools.subcut.inject.BindingModule 
+  type BindingModule = org.scala_tools.subcut.inject.BindingModule
 
-  type BaseBindingModule = org.scala_tools.subcut.inject.NewBindingModule 
+  type BaseBindingModule = org.scala_tools.subcut.inject.NewBindingModule
 
 }
 

@@ -8,10 +8,14 @@ package domain
 
 package operating
 
+import java.io.{ InputStreamReader, FileWriter, FileOutputStream }
 import java.nio.file.{ StandardCopyOption, Path, Files }
+
+import com.ibm.haploid.core.service.Result
+
+import core.file.deleteDirectory
 import core.service.{ Success, Result, Failure }
-import java.io.{ FileOutputStream, FileWriter, InputStreamReader }
-import core.util.io.{ copyBytes, copyLines }
+import core.util.io.{ copyLines, copyBytes }
 
 /**
  *
@@ -22,21 +26,33 @@ trait FileHandler {
 
   val basedirectory: Path
 
-  val inputdirectory = basedirectory.resolve("input")
+  val workingdirectory = basedirectory.resolve("work")
 
-  val workingdirectory = basedirectory.resolve("working")
+  val outputdirectory = basedirectory.resolve("out")
 
-  val outputdirectory = basedirectory.resolve("output")
+  resetDirectories
+
+  def resetDirectories = {
+    try {
+      deleteDirectory(workingdirectory.toFile)
+      deleteDirectory(outputdirectory.toFile)
+      Files.createDirectories(workingdirectory)
+      Files.createDirectories(outputdirectory)
+    } catch {
+      case e: Throwable ⇒
+        core.newLogger(this).error("Cannot create operating environment : " + e)
+    }
+  }
 
   private def doFileOperation(
     operation: (Path, Path) ⇒ Path,
     targetDir: Path): Path ⇒ Result[Path] = {
     source ⇒
       try {
-        val target = targetDir.resolve(source.getFileName)
+        val target = targetDir.resolve(source.getFileName).toAbsolutePath
         Files.createDirectories(target.getParent)
         debug("File operation (from, to) : " + source + " -> " + target)
-        Success(operation(source, target))
+        Success(operation(source, target).toAbsolutePath)
       } catch {
         case e: Exception ⇒ Failure(e)
       }
@@ -57,16 +73,16 @@ trait FileHandler {
         }
         Success(outPaths)
       } catch {
-        case e ⇒
+        case e: Throwable ⇒
           Failure(e)
       }
   }
 
-  def copyFileToWorkingDirectory(source: Path) =
+  def copyFileToWorkingDirectory(source: Path) = {
     doFileOperation(((from, to) ⇒ Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING)), workingdirectory)(source)
+  }
 
   def copyBinaryResourceToWorkingDirectory(resource: Path) = {
-    Files.createDirectories(workingdirectory)
     doFileOperation(((from, to) ⇒ {
       val filename = from.getFileName
       val out = new FileOutputStream(to.toFile)
@@ -77,7 +93,6 @@ trait FileHandler {
   }
 
   def copyTextResourceToWorkingDirectory(resource: Path) = {
-    Files.createDirectories(workingdirectory)
     doFileOperation(((from, to) ⇒ {
       val filename = from.getFileName
       val out = new FileWriter(to.toFile)
@@ -87,12 +102,15 @@ trait FileHandler {
     }), workingdirectory)(resource)
   }
 
-  def moveFileToOutputDirectory(source: Path) =
+  def moveFileToOutputDirectory(source: Path) = {
     doFileOperation(((from, to) ⇒ Files.move(from, to, StandardCopyOption.REPLACE_EXISTING)), outputdirectory)(source)
+  }
 
   def copyToWorkingDirectory(sources: Path*) = doFileOperations(copyFileToWorkingDirectory)(sources.toList)
 
   def copyBinaryResourcesToWorkingDirectory(resources: Path*) = doFileOperations(copyBinaryResourceToWorkingDirectory)(resources.toList)
+
+  def copyTextResourcesToWorkingDirectory(resources: Path*) = doFileOperations(copyTextResourceToWorkingDirectory)(resources.toList)
 
   def moveToOutputDirectory(sources: Path*) = doFileOperations(moveFileToOutputDirectory)(sources.toList)
 
@@ -102,21 +120,20 @@ trait FileHandler {
       debug("Renaming file : " + current + " -> " + target)
       Success(Files.move(current, target))
     } catch {
-      case e ⇒
+      case e: Throwable ⇒
         Failure(e)
     }
   }
 
   def renameFile(current: String, newname: String): Result[Path] = {
     try {
-      debug("Renaming file : " + current + " -> " + newname)
+      debug("Renaming working file : " + current + " -> " + newname)
       renameFile(workingdirectory.resolve(current), newname)
     } catch {
-      case e ⇒
+      case e: Throwable ⇒
         Failure(e)
     }
   }
 
 }
-
 

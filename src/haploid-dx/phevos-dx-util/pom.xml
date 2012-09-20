@@ -7,7 +7,7 @@
 	<groupId>eu.man</groupId>
 	<artifactId>phevos-dx-util</artifactId>
 
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.7-SNAPSHOT</version>
 
 	<name>phevos-dx-util</name>
 	<description>Utilities and tools used in the phevos-dx framework.</description>
@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>com.ibm.haploid</groupId>
 		<artifactId>haploid-maven3</artifactId>
-		<version>1.0.3</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 
 	<scm>
@@ -41,17 +41,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_2.9.1</artifactId>
+			<artifactId>scalatest_2.9.2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.ibm.haploid</groupId>
-			<artifactId>haploid-core</artifactId>
-			<version>1.0.3</version>
+			<artifactId>haploid-dx-engine</artifactId>
+			<version>1.0.7-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
-			<version>3.1</version>
 		</dependency>
 	</dependencies>
 

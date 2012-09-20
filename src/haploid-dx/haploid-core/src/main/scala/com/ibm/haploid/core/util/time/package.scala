@@ -4,6 +4,8 @@ package core
 
 package util
 
+// import language.postfixOps
+
 import core.logger
 
 /**
@@ -24,32 +26,32 @@ package object time {
   /**
    * Executes f and returns the time elapsed in milliseconds.
    */
-  def timeMillis[R](f: => R): (R, Long) = { val begin = now; val r = f; (r, now - begin) }
+  def timeMillis[R](f: ⇒ R): (R, Long) = { val begin = now; val r = f; (r, now - begin) }
 
   /**
    * Executes f and prints the time elapsed in milliseconds.
    */
-  def infoMillis[R](f: => R): R = { val r = timeMillis(f); logger.info((r._2 / 1000.0) + " sec"); r._1 }
+  def infoMillis[R](f: ⇒ R): R = { val r = timeMillis(f); logger.info((r._2 / 1000.0) + " sec"); r._1 }
 
   /**
    * Executes f and prints message and the time elapsed in nanoseconds.
    */
-  def infoMillis[R](msg: String)(f: => R) = { val r = timeMillis(f); logger.info(msg + " " + (r._2 / 1000.0) + " sec"); r._1 }
+  def infoMillis[R](msg: String)(f: ⇒ R) = { val r = timeMillis(f); logger.info(msg + " " + (r._2 / 1000.0) + " sec"); r._1 }
 
   /**
    * Executes f and returns the time elapsed in nanoseconds.
    */
-  def timeNanos[R](f: => R): (R, Long) = { val begin = nowNanos; val r = f; (r, nowNanos - begin) }
+  def timeNanos[R](f: ⇒ R): (R, Long) = { val begin = nowNanos; val r = f; (r, nowNanos - begin) }
 
   /**
    * Executes f and prints the time elapsed in nanoseconds.
    */
-  def infoNanos[R](f: => R) = { val r = timeNanos(f); logger.info((r._2 / 1000000000.0) + " sec"); r._1 }
+  def infoNanos[R](f: ⇒ R) = { val r = timeNanos(f); logger.info((r._2 / 1000000000.0) + " sec"); r._1 }
 
   /**
    * Executes f and prints message and the time elapsed in nanoseconds.
    */
-  def infoNanos[R](msg: String)(f: => R) = { val r = timeNanos(f); logger.info(msg + " " + (r._2 / 1000000000.0) + " sec"); r._1 }
+  def infoNanos[R](msg: String)(f: ⇒ R) = { val r = timeNanos(f); logger.info(msg + " " + (r._2 / 1000000000.0) + " sec"); r._1 }
 
   import akka.util.duration._
 

@@ -4,8 +4,8 @@ package bootstrapper
 
 import java.io.{ LineNumberReader, InputStreamReader }
 
-import core.concurrent.{ spawn, actorsystem }
-import core.logger
+import core.newLogger
+import core.concurrent.{ spawn, actorsystem ⇒ system }
 
 trait HasTerminationHook {
 
@@ -13,13 +13,16 @@ trait HasTerminationHook {
 
   def onTermination: Int
 
+  val logger = newLogger(this)
+
   spawn {
     val reader = new LineNumberReader(new InputStreamReader(System.in))
     val msg = reader.readLine
     println(msg)
+    logger.error(msg)
     if (terminationtoken == msg) {
       val exitcode = onTermination
-      actorsystem.shutdown
+      system.shutdown
       System.exit(exitcode)
     }
   }

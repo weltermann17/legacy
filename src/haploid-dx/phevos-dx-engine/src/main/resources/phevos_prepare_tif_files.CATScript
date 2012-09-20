@@ -1,0 +1,402 @@
+' -----------------------------------------------------------------------------
+' Script Copyright MAN Truck & Bus AG, 2011
+' -----------------------------------------------------------------------------
+' Description:
+'   Script to prepare the tif files downloaded from ezis.  
+' -----------------------------------------------------------------------------
+
+' ---------------------------------------------------------------
+' Return Codes
+' ---------------------------------------------------------------
+' 1: Something went wrong
+' TBD
+'
+
+
+' ---------------------------------------------------------------
+' Constants
+' ---------------------------------------------------------------
+Public Const WIN = "Windows"
+Public Const UNIX = "UNIX"
+
+Public Const orig_catia_pn			= "orig_catia_part_number"
+Public Const orig_catia_filename	= "orig_catia_filename"
+
+Public Const param_prefix			= "MTB_"
+
+
+' ---------------------------------------------------------------
+' Global variables
+' ---------------------------------------------------------------
+Dim g_strOS As String 					'UNIX or WIN
+Dim g_strLogFilePath As String
+Dim g_fileSystem As Object			'CATIA.FileSystem
+Dim g_systemService As Object		'CATIA.SystemService
+Dim g_systemConfig As Object		'CATIA.SystemConfiguration
+Dim g_strSlash As String			' / or \, depending on OS
+
+Dim g_strCurrDir As String			'calculated from catia session filename
+
+' Variables from job property file
+Dim g_str_mtb_part_number As String					'85.41801-0100
+Dim g_str_mtb_index As String						'_A_
+Dim g_str_mtb_drawing_date As String				'06/04/2012
+Dim g_str_ml_change_number As String
+Dim g_str_vw_part_number As String					'.111.222.333.AA
+Dim g_str_ml_pt_name As String						'TANKO BRACKETO
+Dim g_str_ml_en_name As String						'TANK BRACKET
+
+
+' ---------------------------------------------------------------
+' GetEnvVars()
+' ---------------------------------------------------------------
+' Gets variables from the environment  
+' ---------------------------------------------------------------
+Function GetEnvVars(strWorkDirPath As String) As Boolean
+
+	strWorkDirPath = g_systemService.Environ("PHEVOS_DX_USER_WORK_DIR")
+
+	g_str_mtb_part_number = g_systemService.Environ("PHEVOS_DX_MTB_PART_NUMBER")
+
+	g_str_mtb_index = g_systemService.Environ("PHEVOS_DX_MTB_INDEX")
+
+	g_str_mtb_drawing_date = g_systemService.Environ("PHEVOS_DX_MTB_DRAWING_DATE")
+
+	g_str_ml_change_number = g_systemService.Environ("PHEVOS_DX_ML_CHANGE_NUMBER")
+
+	g_str_vw_part_number = g_systemService.Environ("PHEVOS_DX_VW_PART_NUMBER")
+
+	g_str_ml_pt_name = g_systemService.Environ("PHEVOS_DX_ML_PT_NAME")
+
+	g_str_ml_en_name = g_systemService.Environ("PHEVOS_DX_ML_EN_NAME")
+
+	GetEnvVars = True
+
+End Function 
+
+
+
+Sub CreateCOPDrawing(strTifFilePath As String, strNewFilename As String)
+
+	Dim documents1
+	Set documents1 = CATIA.Documents
+
+	' g_systemService.Print "#####1"
+
+	Dim drawingDocument1
+	Set drawingDocument1 = documents1.Add("Drawing")
+
+	' g_systemService.Print "#####2"
+
+	Dim MySheet
+	Set MySheet = CATIA.ActiveDocument.Sheets.Item("Sheet.1") 
+	MySheet.Activate
+
+	' g_systemService.Print "#####3"
+
+	' Select the Main View, which is always Item(1)
+	Dim MyView
+	Set MyView = MySheet.Views.Item(1)
+
+	' g_systemService.Print "#####4"
+	
+	g_fileSystem.CopyFile strTifFilePath, g_strCurrDir & g_strSlash & "original.tif", True
+	' g_systemService.Print "#####4a"
+	
+	g_fileSystem.DeleteFile strTifFilePath
+	' g_systemService.Print "#####4b"
+	
+	strTifFilePath = g_strCurrDir & g_strSlash & "original.tif"
+	' g_systemService.Print "#####4c"
+		
+	Dim MyDrawingPicture1
+	Set MyDrawingPicture1 = MyView.Pictures.Add(strTifFilePath, 0, 0)
+
+	Dim origHeight, origWidth As Integer
+	origHeight = MyDrawingPicture1.GetOriginalHeight
+	origWidth = MyDrawingPicture1.GetOriginalWidth 
+
+	' g_systemService.Print "#####5"
+
+	' Height x Width
+	' Format A0 ISO = 841 x 1189 mm
+	' Format A1 ISO = 594 x 841 mm
+	' Format A2 ISO = 420 x 594 mm
+	' Format A3 ISO = 297 x 420 mm
+	' Format A4 ISO = 210 x 297 mm
+
+	' Tolerance in mm
+	Dim tolerance As Integer
+	tolerance = 5
+
+	' g_systemService.Print "#####6"
+
+	' drawingDocument1.Close
+	' set drawingDocument1 = Nothing
+
+	g_systemService.Print "#####7"
+
+	Dim strPathToDrwTemplates, strTemplate  As String
+	strPathToDrwTemplates = g_strCurrDir
+
+	' g_systemService.Print "#####8"
+
+	If ((origHeight < (210 + tolerance)) And origWidth < (297 + tolerance)) Then
+
+		'TIFF is A4, use A4 overlong or A3
+		strTemplate = "A3_TEMPLATE.CATDrawing"
+
+	ElseIf ((origHeight < (297 + tolerance)) And origWidth < (210 + tolerance)) Then
+
+		'TIFF is A4 portrait, use A4 portrait
+		strTemplate = "A4_PORTRAIT_TEMPLATE.CATDrawing"
+
+	ElseIf ((origHeight < (297 + tolerance)) And origWidth < (420 + tolerance)) Then
+
+		'TIFF is A3, use A3 overlong or A2
+		strTemplate = "A3_TEMPLATE.CATDrawing"
+
+	ElseIf ((origHeight < (420 + tolerance)) And origWidth < (594 + tolerance)) Then
+
+		'TIFF is A2, use A2 overlong or A1
+		strTemplate = "A2_TEMPLATE.CATDrawing"
+
+	ElseIf ((origHeight < (594 + tolerance)) And origWidth < (841 + tolerance)) Then
+
+		'TIFF is A1, use A1 overlong or A0
+		strTemplate = "A1_TEMPLATE.CATDrawing"
+
+	ElseIf ((origHeight < (841 + tolerance)) And origWidth < (1189 + tolerance)) Then
+
+		'TIFF is A0, use A0 overlong or ?
+		strTemplate = "A0_TEMPLATE.CATDrawing"
+
+	ElseIf ((origHeight < (841 + tolerance)) And origWidth < (1500 + tolerance)) Then 
+    
+		'TIFF is C0,  
+		strTemplate = "C0_TEMPLATE.CATDrawing"
+		
+	ElseIf ((origHeight < (841 + tolerance)) And origWidth < (1900 + tolerance)) Then 
+    
+		'TIFF is B0,  
+		strTemplate = "B0_TEMPLATE.CATDrawing"
+		
+	ElseIf ((origHeight < (841 + tolerance)) And origWidth < (2600 + tolerance)) Then 
+    
+		'TIFF is B1,  
+		strTemplate = "B1_TEMPLATE.CATDrawing"
+		
+	ElseIf ((origHeight < (841 + tolerance)) And origWidth < (3300 + tolerance)) Then 
+    
+		'TIFF is B2,  
+		strTemplate = "B2_TEMPLATE.CATDrawing"
+		
+	ElseIf ((origHeight < (841 + tolerance)) And origWidth < (4000 + tolerance)) Then 
+    
+		'TIFF is B3,  
+		strTemplate = "B3_TEMPLATE.CATDrawing"
+		
+	Else
+		call FatalError(1, "Strange  TIFF size: H" & origHeight & " x W" & origWidth)
+		'g_systemService.Print "Strange  TIFF size: H" & origHeight & " x W" & origWidth
+		'Exit Sub
+	End If
+
+	' g_systemService.Print "#####9"
+
+	g_systemService.Print strPathToDrwTemplates & g_strSlash & strTemplate
+	
+	Dim drawingDocument2	
+	Set drawingDocument2 = documents1.Open(strPathToDrwTemplates & g_strSlash & strTemplate)
+
+	' g_systemService.Print "#####10"
+
+	Set MySheet = CATIA.ActiveDocument.Sheets.Item("Sheet.1")
+	MySheet.Activate
+
+	' Select the Main View, which is always Item(1)
+	Set MyView = MySheet.Views.Item(1)
+
+	Set MyDrawingPicture1 = MyView.Pictures.Add(strTifFilePath, 0, 0)
+
+	' g_systemService.Print "#####11"
+
+	MySheet.Activate
+	set MyView = nothing
+	Set MyView = MySheet.Views.Item(2)
+	MyView.Activate
+
+	Dim DrwView
+	Dim DrwTexts
+	Dim DrwText
+
+	Set DrwView = MySheet.Views.ActiveView
+	Set DrwTexts = DrwView.Texts
+
+	Set DrwText = DrwTexts.GetItem("Phevos_partnr_le")
+	DrwText.Text = g_str_vw_part_number
+
+	'Set DrwText = DrwTexts.GetItem("Phevos_partnr_ri")
+	DrwText.Text = g_str_vw_part_number
+
+	Set DrwText = DrwTexts.GetItem("Phevos_benennung")
+	DrwText.Text = g_str_ml_pt_name
+
+	Set DrwText = DrwTexts.GetItem("Phevos_title")
+	DrwText.Text = g_str_ml_en_name
+
+	Set DrwText = DrwTexts.GetItem("Phevos_descr")
+	DrwText.Text = g_str_ml_change_number
+
+	Set DrwText = DrwTexts.GetItem("Phevos_date")
+	DrwText.Text = g_str_mtb_drawing_date
+
+	Set DrwText = DrwTexts.GetItem("Phevos_sheetnr")
+	DrwText.Text = CStr(CInt(Mid(strNewFilename, 13, 2)))
+
+	Set MyView = MySheet.Views.Item(1)
+	MyView.Activate
+	MySheet.Activate 
+
+	g_systemService.Print "#####12"
+
+	drawingDocument2.SaveAs g_strCurrDir & g_strSlash & "Result.CATDrawing"
+		
+	g_systemService.Print "#####13"
+
+	g_systemService.Print g_strCurrDir & g_strSlash & strNewFilename
+	drawingDocument2.ExportData g_strCurrDir & g_strSlash & strNewFilename , "tif"
+
+	g_systemService.Print "#####14"
+
+End Sub
+
+
+Sub CATMain()
+
+	' CATIA.SystemService.Print "####0"
+	CATIA.DisplayFileAlerts = False
+	CATIA.Interactive = False
+	
+	On Error Resume Next
+	
+	' -------------------------------------------------------------------------
+	' Init global vars
+	' -------------------------------------------------------------------------
+	Set g_fileSystem = CATIA.FileSystem
+	Set g_systemService = CATIA.SystemService
+	Set g_systemConfig = CATIA.SystemConfiguration
+
+	' g_systemService.Print "####1"
+	
+	g_strLogFilePath = ""	' forces to log to console only until filled
+
+	' g_systemService.Print "####2"
+
+	If (g_systemConfig.OperatingSystem = "aix_a") Then
+		g_strOS=UNIX
+		g_strSlash = "/"
+	Else
+		g_strOS=WIN
+		g_strSlash = "\"
+	End If
+
+	' g_systemService.Print "####3"
+
+	' -------------------------------------------------------------------------	
+	' Init local vars
+	' -------------------------------------------------------------------------
+	Dim bOK As Boolean
+	bOK = True
+
+	' -------------------------------------------------------------------------
+	' Get current directory from file open in Session
+	' -------------------------------------------------------------------------
+
+	g_strCurrDir = ""
+
+	' g_systemService.Print "####4"
+
+	if (0 = strcomp(g_strCurrDir, "")) then
+		Dim strWorkDirPath  As String
+		if (True = GetEnvVars(strWorkDirPath) ) Then
+			g_strCurrDir = strWorkDirPath
+		Else
+			call FatalError(1, "User env var PHEVOS_DX_USER_WORK_DIR must be set for this macro -> exiting")
+			'g_systemService.Print "User env var PHEVOS_DX_USER_WORK_DIR must be set for this macro -> exiting"
+			'Exit Sub
+		end if
+	end if
+
+	' g_systemService.Print "####5"
+
+	Dim fileList
+	Dim currentFolder
+	Dim currFile
+
+	' g_systemService.Print "####6"
+
+	Set currentFolder = g_fileSystem.GetFolder( g_strCurrDir)
+	Set fileList = currentFolder.Files
+
+	Dim strInputDir As String
+
+	' -------------------------------------------------------------------------
+	' Get all tif files in work dir and
+	' Check all tif files have template filename, exit with msg when not
+	' -------------------------------------------------------------------------
+
+	' g_systemService.Print "####7"
+
+	Dim bTifExists As Boolean
+	bTifExists = False
+	Set fileList = currentFolder.Files
+
+	' g_systemService.Print "####8"
+
+	for each currFile in fileList
+
+	' g_systemService.Print "####9"
+
+		If (Right(currFile.name, 3) = "tif") Then
+
+	' g_systemService.Print "####10"
+
+			bTifExists = True
+			CreateCOPDrawing currFile.Path, currFile.Name
+
+	' g_systemService.Print "####11"
+
+		End If
+	next
+
+	' g_systemService.Print "####13"
+
+	If (False = bTifExists) Then
+		call FatalError(1, "No .tif files found in work_dir!")
+	End If
+
+	g_systemService.Print "Finished successfully."
+
+	' -------------------------------------------------------------------------
+	'Cleanup
+	' -------------------------------------------------------------------------
+	Set g_fileSystem = Nothing
+	Set g_systemService = Nothing
+	Set g_systemConfig = Nothing
+
+	CATIA.Quit
+	
+End Sub
+
+
+
+Sub FatalError(returncode As Integer, message As String)
+
+	g_systemService.Print "###<Return Code> " & returncode
+	g_systemService.Print "###<Return Message> " & message
+	
+	CATIA.Quit
+
+End Sub
+
