@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<packaging>jar</packaging>
+
+	<artifactId>haploid-selfextractor</artifactId>
+
+	<version>1.0.4-SNAPSHOT</version>
+
+	<name>haploid-selfextractor</name>
+	<description>Add this component to your application to deliver a self-extracting executable-jar.</description>
+
+	<parent>
+		<groupId>com.ibm.haploid</groupId>
+		<artifactId>haploid-maven3</artifactId>
+		<version>1.0.3</version>
+	</parent>
+
+	<scm>
+		<developerConnection>scm:git:ssh://git@mndemucpenon.mn-man.biz/${project.name}.git</developerConnection>
+	</scm>
+
+</project>
+

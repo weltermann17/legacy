@@ -1,0 +1,644 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<packaging>pom</packaging>
+
+	<groupId>com.ibm.haploid</groupId>
+	<artifactId>haploid-template-meta</artifactId>
+
+	<name>haploid-template-meta</name>
+
+	<version>0.0.4-SNAPSHOT</version>
+
+	<description>A template maven3 meta project.</description>
+
+	<url>http://mndemucpenon.mn-man.biz/haploid-site/${project.name}</url>
+
+	<scm>
+		<connection>scm:git:ssh://git@mndemucpenon.mn-man.biz/${project.name}.git</connection>
+		<developerConnection>scm:git:ssh://git@mndemucpenon.mn-man.biz/${project.name}.git</developerConnection>
+	</scm>
+
+	<properties>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<java.version>1.7</java.version>
+		<scala.version>2.9.2-RC1</scala.version>
+		<akka.version>2.0</akka.version>
+		<junit.version>4.10</junit.version>
+		<restlet.version>2.1-RC1</restlet.version>
+		<gwt.version>2.4.0</gwt.version>
+		<smartgwt.version>2.5</smartgwt.version>
+		<piriti.version>0.8</piriti.version>
+		<javaee-api.version>6.0</javaee-api.version>
+		<ojdbc6.version>11.2.0</ojdbc6.version>
+		<squeryl.version>0.9.5-RC1</squeryl.version>
+		<guava.version>11.0.2</guava.version>
+
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+		<maven-assembly-plugin.version>2.3</maven-assembly-plugin.version>
+		<maven-clean-plugin.version>2.4.1</maven-clean-plugin.version>
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<maven-dependency-plugin.version>2.4</maven-dependency-plugin.version>
+		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
+		<maven-eclipse-plugin.version>2.9</maven-eclipse-plugin.version>
+		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+		<maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
+		<maven-plugin-api.version>2.0</maven-plugin-api.version>
+		<maven-plugin-plugin.version>2.9</maven-plugin-plugin.version>
+		<maven-project-info-reports-plugin.version>2.4</maven-project-info-reports-plugin.version>
+		<maven-release-plugin.version>2.2.2</maven-release-plugin.version>
+		<maven-resources-plugin.version>2.5</maven-resources-plugin.version>
+		<maven-scm-plugin.version>1.6</maven-scm-plugin.version>
+		<maven-shade-plugin.version>1.6</maven-shade-plugin.version>
+		<maven-site-plugin.version>3.0</maven-site-plugin.version>
+		<maven-source-plugin.version>2.1.2</maven-source-plugin.version>
+		<maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
+		<maven-scala-plugin.version>2.15.2</maven-scala-plugin.version>
+		<maven-wagon-plugin.version>2.2</maven-wagon-plugin.version>
+		<maven-war-plugin.version>2.2</maven-war-plugin.version>
+		<m2e-lifecycle-mapping-plugin.version>1.0.0</m2e-lifecycle-mapping-plugin.version>
+		<gwt-maven-plugin.version>2.4.0</gwt-maven-plugin.version>
+
+	</properties>
+
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+
+		<pluginManagement>
+
+			<plugins>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>${m2e-lifecycle-mapping-plugin.version}</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.scala-tools</groupId>
+										<artifactId>maven-scala-plugin</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>compile</goal>
+											<goal>testCompile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.scala-tools</groupId>
+					<artifactId>maven-scala-plugin</artifactId>
+					<version>${maven-scala-plugin.version}</version>
+					<configuration>
+						<includes>
+							<include>**/*.scala</include>
+						</includes>
+						<scalaVersion>${scala.version}</scalaVersion>
+						<args>
+							<arg>-target:jvm-1.5</arg>
+							<arg>-deprecation</arg>
+							<arg>-unchecked</arg>
+							<arg>-optimize</arg>
+							<arg>-g:none</arg>
+						</args>
+						<jvmArgs>
+							<jvmArg>-Xmx2g</jvmArg>
+							<jvmArg>-Xms384m</jvmArg>
+							<jvmArg>-Xss8m</jvmArg>
+						</jvmArgs>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>${maven-eclipse-plugin.version}</version>
+					<configuration>
+						<downloadSources>true</downloadSources>
+						<buildcommands>
+							<buildcommand>ch.epfl.lamp.sdt.core.scalabuilder</buildcommand>
+						</buildcommands>
+						<additionalProjectnatures>
+							<projectnature>ch.epfl.lamp.sdt.core.scalanature</projectnature>
+						</additionalProjectnatures>
+						<classpathContainers>
+							<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+							<classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
+						</classpathContainers>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+					<configuration>
+						<useFile>false</useFile>
+						<disableXmlReport>false</disableXmlReport>
+						<argLine>-server -showversion -Xms384m -Xmx1g </argLine>
+						<includes>
+							<include>**/*Test.*</include>
+							<include>**/*Suite.*</include>
+						</includes>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>${maven-shade-plugin.version}</version>
+					<configuration>
+						<finalName>${project.artifactId}-${project.version}</finalName>
+						<minimizeJar>true</minimizeJar>
+						<transformers>
+							<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<mainClass>${transformer.mainClass}</mainClass>
+							</transformer>
+						</transformers>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>shade</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>${maven-site-plugin.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>${maven-wagon-plugin.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${maven-assembly-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${maven-antrun-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${maven-dependency-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${maven-deploy-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${maven-release-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>${maven-jar-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>${maven-project-info-reports-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>${maven-clean-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>${maven-scm-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven-javadoc-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-wagon-plugin</artifactId>
+					<version>${maven-wagon-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-plugin-plugin</artifactId>
+					<version>${maven-plugin-plugin.version}</version>
+					<configuration>
+						<goalPrefix>lifecycle-mapping</goalPrefix>
+					</configuration>
+					<executions>
+						<execution>
+							<id>generated-helpmojo</id>
+							<goals>
+								<goal>helpmojo</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>gwt-maven-plugin</artifactId>
+					<version>${gwt-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<configuration>
+								<module />
+								<generateDirectory>
+									target/GWT_generateDirectory/</generateDirectory>
+								<logLevel>INFO</logLevel>
+								<localWorkers>3</localWorkers>
+								<optimizationLevel>9</optimizationLevel>
+							</configuration>
+							<goals>
+								<goal>compile</goal>
+								<goal>generateAsync</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${maven-war-plugin.version}</version>
+				</plugin>
+
+			</plugins>
+
+		</pluginManagement>
+
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-plugin-api</artifactId>
+				<version>${maven-plugin-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-library</artifactId>
+				<version>${scala.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-compiler</artifactId>
+				<version>${scala.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.typesafe.akka</groupId>
+				<artifactId>akka-actor</artifactId>
+				<version>${akka.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.typesafe.akka</groupId>
+				<artifactId>akka-remote</artifactId>
+				<version>${akka.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jse</groupId>
+				<artifactId>org.restlet</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jse</groupId>
+				<artifactId>org.restlet.ext.ssl</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jse</groupId>
+				<artifactId>org.restlet.ext.httpclient</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jse</groupId>
+				<artifactId>org.restlet.ext.jackson</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jse</groupId>
+				<artifactId>org.restlet.ext.jetty</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.jse</groupId>
+				<artifactId>org.restlet.ext.crypto</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>${gwt-maven-plugin.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt-user</artifactId>
+				<version>${gwt.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.gwt</groupId>
+				<artifactId>org.restlet</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.gwt</groupId>
+				<artifactId>org.restlet.ext.json</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.restlet.gwt</groupId>
+				<artifactId>org.restlet.ext.xml</artifactId>
+				<version>${restlet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.smartgwt</groupId>
+				<artifactId>smartgwt</artifactId>
+				<version>${smartgwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>name.pehl</groupId>
+				<artifactId>piriti-user</artifactId>
+				<version>${piriti.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>name.pehl</groupId>
+				<artifactId>piriti-dev</artifactId>
+				<version>${piriti.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>name.pehl</groupId>
+				<artifactId>piriti-restlet</artifactId>
+				<version>${piriti.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javaee</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>${javaee-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>ojdbc6</artifactId>
+				<version>${ojdbc6.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>xdb</artifactId>
+				<version>${ojdbc6.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>xmlparserv2</artifactId>
+				<version>${ojdbc6.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>aspectwerkz</groupId>
+				<artifactId>aspectwerkz</artifactId>
+				<version>2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.0.0.GA</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.0.0.GA</version>
+				<classifier>sources</classifier>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>1.3.165</version>
+			</dependency>
+			<dependency>
+				<groupId>org.squeryl</groupId>
+				<artifactId>squeryl_2.9.1</artifactId>
+				<version>${squeryl.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>3.8</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>3.8</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-schemas</artifactId>
+				<version>3.8</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.xmlbeans</groupId>
+				<artifactId>xmlbeans</artifactId>
+				<version>2.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.media</groupId>
+				<artifactId>jai_codec</artifactId>
+				<version>1.1.3</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.media</groupId>
+				<artifactId>jai_core</artifactId>
+				<version>1.1.3</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.media</groupId>
+				<artifactId>jai_imageio</artifactId>
+				<version>1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>net.jcip</groupId>
+				<artifactId>jcip-annotations</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>zero</groupId>
+				<artifactId>zero.core</artifactId>
+				<version>2.0.0.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<distributionManagement>
+		<site>
+			<id>haploid-site</id>
+			<name>${project.name}</name>
+			<url>scp://mndemucpenon.mn-man.biz/application/GEP/home/haploid-site/${project.name}</url>
+		</site>
+		<repository>
+			<id>libs-release-local</id>
+			<name>Artifactory Release Local Repository</name>
+			<url>http://mndemucpenon.mn-man.biz:8011/artifactory/libs-release-local</url>
+			<uniqueVersion>true</uniqueVersion>
+		</repository>
+		<snapshotRepository>
+			<id>libs-snapshot-local</id>
+			<name>Artifactory Snapshots Local Repository</name>
+			<url>http://mndemucpenon.mn-man.biz:8011/artifactory/libs-snapshot-local</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<version>${maven-scala-plugin.version}</version>
+				<configuration>
+					<scalaVersion>${scala.version}</scalaVersion>
+					<args>
+						<arg>-target:jvm-1.5</arg>
+						<arg>-deprecation</arg>
+						<arg>-g:none</arg>
+					</args>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<organization>
+		<name>IBM Deutschland GmbH</name>
+		<url>http://www.ibm.com/de/de/</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>gschmidt</id>
+			<name>Guido Schmidt</name>
+			<organization>IBM EBS Deutschland GmbH</organization>
+			<organizationUrl>http://www.ibm.com/de/de/</organizationUrl>
+			<email>g-schmidt@de.ibm.com</email>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>rpaix</id>
+			<name>Robert Paix</name>
+			<organization>IBM EBS Deutschland GmbH</organization>
+			<organizationUrl>http://www.ibm.com/de/de/</organizationUrl>
+			<email>robert.paix@de.ibm.com</email>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>mheisig</id>
+			<name>Mario Heisig</name>
+			<organization>IBM EBS Deutschland GmbH</organization>
+			<organizationUrl>http://www.ibm.com/de/de/</organizationUrl>
+			<email>mario.heisig@de.ibm.com</email>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>mwellner</id>
+			<name>Michael Wellner</name>
+			<organization>IBM Deutschland FIS GmbH</organization>
+			<organizationUrl>http://www.ibm.com/de/de/</organizationUrl>
+			<email>michael.wellner@de.ibm.com</email>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>International License Agreement for Early Release of Programs (ILAR)</name>
+			<distribution>manual</distribution>
+			<comments>An IBM proprietary license for early releases.</comments>
+		</license>
+	</licenses>
+
+</project>
