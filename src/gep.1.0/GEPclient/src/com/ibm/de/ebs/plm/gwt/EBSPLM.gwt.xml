@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<!-- Inherit the core Web Toolkit stuff.                                         -->
+	<inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.google.gwt.logging.Logging"/>
+	<inherits name="com.google.web.bindery.event.Event"/> 
+	
+	<!-- multi-module linker                                                         -->
+	<add-linker name="xs" />
+
+	<!-- during development only compile for one browser                             -->
+	<!-- <set-property name="user.agent" value="safari" />                           -->                     
+	
+	<!-- gwt-logging                                                                 -->
+    <set-property name="gwt.logging.enabled" value="TRUE"/>
+ 	<set-property name="gwt.logging.logLevel" value="INFO"/> 
+    <set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.developmentModeHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.firebugHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.popupHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED"/>
+	
+	<!-- Other module inherits                                                       -->
+
+	<!-- SmartGWT                                                                    -->
+	<inherits name="com.smartgwt.SmartGwtNoTheme"/>
+	<inherits name="com.smartclient.theme.graphite.Graphite" />
+	
+	<!-- Piriti                                                                      -->
+	<inherits name="name.pehl.piriti.Piriti" />
+
+	<!-- RESTlet                                                                     -->
+	<inherits name="org.restlet.Restlet" />
+
+	<!-- JIT                                                                         -->
+	<script src="../javascript/jit200.js" />
+
+	<!-- json2                                                                       -->
+	<script src="../javascript/json_parse_state.js" />
+
+	<!-- Other module inherits                                                       -->
+
+	<!-- Specify the paths for translatable code                                     -->
+	<source path="client" />
+	
+    <generate-with class="com.ibm.de.ebs.plm.gwt.rebind.mvp.MVPGenerator">
+	  <when-type-assignable class="com.ibm.de.ebs.plm.gwt.client.mvp.Generated"/>
+    </generate-with>
+	
+</module>

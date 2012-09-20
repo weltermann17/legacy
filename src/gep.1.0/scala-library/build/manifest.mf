@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Rsrc-Class-Path: ./ zero.core-2.0.0.0.28192.jar antlr-2.7.6.jar javaee
+ .jar org.eclipse.jetty.util.jar org.codehaus.jackson.mapper.jar org.c
+ odehaus.jackson.core.jar org.restlet.jar com.ibm.de.ebs.plm.jms.imple
+ mentation.reactor.jar javax.servlet.jar org.apache.httpcore.jar org.e
+ clipse.jetty.continuations.jar com.sun.grizzly.util.jar net.jcip.anno
+ tations.jar org.eclipse.jetty.http.jar org.eclipse.jetty.server.jar o
+ rg.apache.james.mime4j.jar org.apache.httpclient.jar org.apache.commo
+ ns.logging.jar org.eclipse.jetty.ajp.jar com.sun.grizzly.jar zero.ker
+ nel-2.0.0.0.28090.jar org.eclipse.jetty.io.jar org.restlet.ext.jetty.
+ jar org.restlet.ext.jackson.jar org.apache.commons.codec.jar org.rest
+ let.ext.httpclient.jar org.apache.httpmime.jar aspectwerkz-2.0.jar sc
+ ala-library.jar
+Class-Path: .
+Rsrc-Main-Class: de.man.mn.gep.Main
+Main-Class: org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader
+
