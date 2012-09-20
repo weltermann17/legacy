@@ -13,4 +13,5 @@
 *.CATSettings
 *.exe
 *.dll
+*.log
 

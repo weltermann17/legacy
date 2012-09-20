@@ -1,7 +1,0 @@
-Heap
- par new generation   total 118016K, used 4198K [7dae00000, 7e2e00000, 7e2e00000)
-  eden space 104960K,   4% used [7dae00000, 7db2199b0, 7e1480000)
-  from space 13056K,   0% used [7e1480000, 7e1480000, 7e2140000)
-  to   space 13056K,   0% used [7e2140000, 7e2140000, 7e2e00000)
- concurrent mark-sweep generation total 393216K, used 0K [7e2e00000, 7fae00000, 7fae00000)
- concurrent-mark-sweep perm gen total 21248K, used 2422K [7fae00000, 7fc2c0000, 800000000)

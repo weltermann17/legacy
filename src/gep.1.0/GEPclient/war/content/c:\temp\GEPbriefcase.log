@@ -1,6 +1,0 @@
-15.04.2012 14:41:49 BootStrapper info
-INFO: execute BootStrapper, start
-15.04.2012 14:41:49 BootStrapper severe
-SCHWERWIEGEND: Cannot run program "wscript": error=2, No such file or directory
-15.04.2012 14:41:49 BootStrapper severe
-SCHWERWIEGEND: Error while determin if Catia is running, executing is canceled !
