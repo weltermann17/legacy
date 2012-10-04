@@ -1,5 +1,14 @@
 package com.ibm.haploid.core.util;
 
+/* Copyright (C) 1992 Eric Young - see COPYING for more details */
+
+/* Eric Young.
+ * This version of crypt has been developed from my MIT compatable
+ * DES library.
+ * The library is available at pub/DES at ftp.psy.uq.oz.au
+ * eay@psych.psy.uq.oz.au
+ */
+
 public final class Crypt {
 
 	public static String crypt(final String reference, final String input) {
