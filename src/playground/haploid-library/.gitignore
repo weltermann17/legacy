@@ -1,0 +1,7 @@
+/target
+*.cache
+*.zip
+.classpath
+/logs
+/temp
+
